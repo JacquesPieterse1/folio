@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { X, Menu } from 'lucide-react'
+import { ThemeToggle } from '@/src/components/ui/ThemeToggle'
+import { CommandPalette } from '@/src/components/ui/CommandPalette'
 
 const navLinks = [
   { label: 'Work', href: '#projects' },
@@ -111,7 +113,7 @@ export function Navbar() {
             ))}
           </div>
 
-          {/* Right: Status + Hamburger */}
+          {/* Right: Status + ThemeToggle + Hamburger */}
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
             {/* Available status pill */}
             <div
@@ -140,6 +142,9 @@ export function Navbar() {
               />
               Available
             </div>
+
+            {/* Theme toggle */}
+            <ThemeToggle />
 
             {/* Hamburger — mobile only */}
             <button
@@ -217,6 +222,9 @@ export function Navbar() {
           .nav-pills { display: none !important; }
         }
       `}</style>
+
+      {/* Command palette — fixed-position, triggered by ⌘K / Ctrl+K */}
+      <CommandPalette />
     </>
   )
 }

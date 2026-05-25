@@ -2,6 +2,10 @@ import type { Metadata } from 'next'
 import { Syne, Space_Mono } from 'next/font/google'
 import './globals.css'
 import { Providers } from '@/src/components/ui/Providers'
+import { LoadingScreen } from '@/src/components/ui/LoadingScreen'
+import { CustomCursor } from '@/src/components/ui/CustomCursor'
+import { ScrollProgress } from '@/src/components/ui/ScrollProgress'
+import { Navbar } from '@/src/components/ui/Navbar'
 
 const syne = Syne({
   subsets: ['latin'],
@@ -51,10 +55,10 @@ export default function RootLayout({
     >
       <body className="antialiased">
         <Providers>
-          {/* TODO: <LoadingScreen /> */}
-          {/* TODO: <CustomCursor /> */}
-          {/* TODO: <ScrollProgress /> */}
-          {/* TODO: <Navbar /> */}
+          <LoadingScreen />
+          <CustomCursor />
+          <ScrollProgress />
+          <Navbar />
           {children}
         </Providers>
       </body>

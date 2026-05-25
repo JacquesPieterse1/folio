@@ -30,6 +30,8 @@ export function HeroSection() {
           gridTemplateColumns: '1fr 1fr',
           gap: '48px',
           alignItems: 'center',
+          position: 'relative',
+          zIndex: 1,
         }}
         className="hero-inner"
       >
@@ -161,6 +163,7 @@ export function HeroSection() {
 
         {/* RIGHT COLUMN — project preview grid */}
         <div
+          className="hero-project-grid"
           style={{
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',
@@ -185,6 +188,10 @@ export function HeroSection() {
           .hero-inner {
             grid-template-columns: 1fr !important;
             padding-top: 100px !important;
+            padding-bottom: 48px !important;
+          }
+          .hero-project-grid {
+            display: none !important;
           }
         }
       `}</style>

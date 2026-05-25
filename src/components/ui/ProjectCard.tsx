@@ -92,6 +92,7 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
 
       {/* Content side */}
       <div
+        className="project-content"
         style={{
           order: isEven ? 1 : 0,
           display: 'flex',
@@ -222,9 +223,13 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
         @media (max-width: 768px) {
           .project-card {
             grid-template-columns: 1fr !important;
+            gap: 24px !important;
           }
           .project-image-wrap {
             order: 0 !important;
+          }
+          .project-content {
+            order: 1 !important;
           }
         }
       `}</style>

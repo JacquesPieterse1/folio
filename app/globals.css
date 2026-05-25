@@ -73,6 +73,12 @@ body {
   z-index: 0;
 }
 
+/* Ensure direct children of .grain sit above the grain overlay */
+.grain > * {
+  position: relative;
+  z-index: 1;
+}
+
 /* ─────────────────────────────────────────────
    Selection
 ───────────────────────────────────────────── */

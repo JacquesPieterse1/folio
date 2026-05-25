@@ -7,7 +7,6 @@ export function CustomCursor() {
   const dotX = useMotionValue(-100)
   const dotY = useMotionValue(-100)
 
-  const springConfig = { damping: 28, stiffness: 300, mass: 0.5 }
   const ringSpringConfig = { damping: 40, stiffness: 200, mass: 0.8 }
 
   const ringX = useSpring(dotX, ringSpringConfig)

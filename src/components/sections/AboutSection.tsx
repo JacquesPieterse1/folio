@@ -30,8 +30,9 @@ export function AboutSection() {
       >
         {/* LEFT COLUMN */}
         <div style={{ position: 'relative' }}>
-          {/* Rotated ABOUT label */}
+          {/* Rotated ABOUT label — desktop only */}
           <div
+            className="about-rotated-label"
             style={{
               position: 'absolute',
               top: 0,
@@ -249,6 +250,11 @@ export function AboutSection() {
         @media (max-width: 768px) {
           .about-inner {
             grid-template-columns: 1fr !important;
+            gap: 32px !important;
+            padding: 64px 24px !important;
+          }
+          .about-rotated-label {
+            display: none !important;
           }
         }
       `}</style>

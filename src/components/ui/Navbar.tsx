@@ -117,6 +117,7 @@ export function Navbar() {
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
             {/* Available status pill */}
             <div
+              className="nav-status-pill"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -220,6 +221,9 @@ export function Navbar() {
       <style>{`
         @media (max-width: 768px) {
           .nav-pills { display: none !important; }
+        }
+        @media (max-width: 400px) {
+          .nav-status-pill { display: none !important; }
         }
       `}</style>
 

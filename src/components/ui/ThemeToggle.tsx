@@ -4,15 +4,14 @@ import { useEffect, useState } from 'react'
 import { Sun, Moon } from 'lucide-react'
 
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark')
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    if (typeof window === 'undefined') return 'dark'
+    return (localStorage.getItem('theme') as 'dark' | 'light' | null) ?? 'dark'
+  })
 
   useEffect(() => {
-    const stored = localStorage.getItem('theme') as 'dark' | 'light' | null
-    if (stored) {
-      setTheme(stored)
-      document.documentElement.setAttribute('data-theme', stored)
-    }
-  }, [])
+    document.documentElement.setAttribute('data-theme', theme)
+  }, [theme])
 
   const toggle = () => {
     const next = theme === 'dark' ? 'light' : 'dark'

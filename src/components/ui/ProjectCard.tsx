@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { m } from 'framer-motion'
 import { GitBranch, ExternalLink } from 'lucide-react'
 import { type Project } from '@/src/lib/data'
@@ -39,14 +40,13 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
         className="project-image-wrap"
       >
         {/* Image */}
-        <img
+        <Image
           src={project.image}
           alt={project.title}
+          fill
+          sizes="(max-width: 768px) 100vw, 50vw"
           style={{
-            width: '100%',
-            height: '100%',
             objectFit: 'cover',
-            display: 'block',
           }}
         />
         {/* Gradient overlay */}

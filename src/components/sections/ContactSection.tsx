@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 export function ContactSection() {
   return (
     <section
@@ -217,14 +219,13 @@ export function ContactSection() {
                 border: '1px solid var(--color-border)',
               }}
             >
-              <img
+              <Image
                 src="https://placehold.co/400x500/1a1a1a/444444"
                 alt="Jacques Pieterse"
+                fill
+                sizes="360px"
                 style={{
-                  width: '100%',
-                  height: '100%',
                   objectFit: 'cover',
-                  display: 'block',
                 }}
               />
               {/* Gradient overlay */}

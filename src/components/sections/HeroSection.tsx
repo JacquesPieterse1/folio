@@ -1,13 +1,5 @@
 import { cn } from '@/src/lib/utils'
 
-const projectPreviews = [
-  { id: '01', label: 'AI ANALYTICS', tall: true },
-  { id: '02', label: 'SAAS PORTAL', tall: false },
-  { id: '03', label: 'REAL ESTATE', tall: false },
-  { id: '04', label: 'FITNESS APP', tall: false },
-  { id: '05', label: 'CYBERSECURITY', tall: false },
-]
-
 export function HeroSection() {
   return (
     <section

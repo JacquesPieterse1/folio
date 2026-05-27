@@ -1,44 +1,37 @@
 import type { Metadata } from 'next'
-import { Syne, Space_Mono } from 'next/font/google'
+import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import { Providers } from '@/src/components/ui/Providers'
-import { LoadingScreen } from '@/src/components/ui/LoadingScreen'
 import { CustomCursor } from '@/src/components/ui/CustomCursor'
-import { ScrollProgress } from '@/src/components/ui/ScrollProgress'
-import { Navbar } from '@/src/components/ui/Navbar'
+import { Nav } from '@/src/components/ui/Nav'
+import { RevealObserver } from '@/src/components/ui/RevealObserver'
+import { LoadingScreen } from '@/src/components/ui/LoadingScreen'
 
-const syne = Syne({
+const geist = Geist({
   subsets: ['latin'],
-  weight: ['700', '800'],
-  variable: '--font-syne',
+  variable: '--font-display',
   display: 'swap',
 })
 
-const spaceMono = Space_Mono({
+const geistMono = Geist_Mono({
   subsets: ['latin'],
-  weight: ['400', '700'],
-  variable: '--font-space-mono',
+  variable: '--font-mono',
   display: 'swap',
 })
 
 export const metadata: Metadata = {
-  title: 'Jacques Pieterse — Full Stack Developer',
+  title: 'Jacques Pieterse — Full-Stack Developer',
   description:
-    'Full-stack developer based in Cape Town, South Africa. Building scalable apps, AI systems, and modern digital experiences.',
-  keywords: ['full stack developer', 'software engineer', 'Next.js', 'React', '.NET', 'Cape Town'],
+    'Full-stack developer based in Cape Town, South Africa. Shipping real products — from internal tooling to mobile apps and web frontends.',
+  keywords: ['full stack developer', 'software engineer', 'Next.js', 'React', 'Go', 'Cape Town'],
   authors: [{ name: 'Jacques Pieterse' }],
   openGraph: {
-    title: 'Jacques Pieterse — Full Stack Developer',
+    title: 'Jacques Pieterse — Full-Stack Developer',
     description: 'Full-stack developer based in Cape Town, South Africa.',
     url: 'https://jacquespieterse.dev',
     siteName: 'Jacques Pieterse',
     locale: 'en_ZA',
     type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Jacques Pieterse — Full Stack Developer',
-    description: 'Full-stack developer based in Cape Town, South Africa.',
   },
 }
 
@@ -51,14 +44,20 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${syne.variable} ${spaceMono.variable}`}
+      className={`${geist.variable} ${geistMono.variable}`}
     >
       <body className="antialiased">
+        {/* Anti-FOUC: set theme before React hydration */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem('jp.theme');document.documentElement.setAttribute('data-theme',t||'light');}catch(e){}`
+          }}
+        />
         <Providers>
           <LoadingScreen />
           <CustomCursor />
-          <ScrollProgress />
-          <Navbar />
+          <RevealObserver />
+          <Nav />
           {children}
         </Providers>
       </body>

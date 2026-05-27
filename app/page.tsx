@@ -1,10 +1,9 @@
 import { HeroSection } from '@/src/components/sections/HeroSection'
 import { AboutSection } from '@/src/components/sections/AboutSection'
 import { ProjectsSection } from '@/src/components/sections/ProjectsSection'
-import { ServicesSection } from '@/src/components/sections/ServicesSection'
-import { StackSection } from '@/src/components/sections/StackSection'
+import { FocusSection } from '@/src/components/sections/FocusSection'
+import { LiveCodeDemo } from '@/src/components/sections/LiveCodeDemo'
 import { ContactSection } from '@/src/components/sections/ContactSection'
-import { FooterSection } from '@/src/components/sections/FooterSection'
 
 export default function Home() {
   return (
@@ -12,10 +11,9 @@ export default function Home() {
       <HeroSection />
       <AboutSection />
       <ProjectsSection />
-      <ServicesSection />
-      <StackSection />
+      <FocusSection />
+      <LiveCodeDemo />
       <ContactSection />
-      <FooterSection />
     </main>
   )
 }

@@ -42,7 +42,7 @@ export function StackSection() {
             style={{
               fontFamily: 'var(--font-syne), sans-serif',
               fontWeight: 800,
-              fontSize: 'clamp(40px, 5vw, 72px)',
+              fontSize: 'clamp(24px, 8vw, 72px)',
               letterSpacing: '-0.04em',
               lineHeight: 0.9,
               color: 'var(--color-text)',

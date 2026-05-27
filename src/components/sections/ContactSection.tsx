@@ -1,263 +1,99 @@
-import Image from 'next/image'
+'use client'
+
+import { useEffect, useRef } from 'react'
+
+const ACTIONS = [
+  { label: 'Email', href: 'mailto:jacquespieterse2000@gmail.com', ghost: false },
+  { label: 'GitHub', href: 'https://github.com/JacquesPieterse1', ghost: true },
+  { label: 'LinkedIn', href: '#', ghost: true },
+  { label: 'X / Twitter', href: '#', ghost: true },
+]
 
 export function ContactSection() {
   return (
-    <section
-      id="contact"
-      style={{
-        backgroundColor: 'var(--color-surface)',
-        borderTop: '1px solid var(--color-border)',
-        position: 'relative',
-        overflow: 'hidden',
-      }}
-    >
-      {/* Animated radial gradient orbs — decorative background */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          inset: 0,
-          pointerEvents: 'none',
-          zIndex: 0,
-        }}
-      >
-        <div
-          style={{
-            position: 'absolute',
-            top: '-20%',
-            right: '-10%',
-            width: '600px',
-            height: '600px',
-            borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(168,197,218,0.06) 0%, transparent 70%)',
-            animation: 'float1 20s ease-in-out infinite',
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            bottom: '-20%',
-            left: '-10%',
-            width: '500px',
-            height: '500px',
-            borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(168,197,218,0.04) 0%, transparent 70%)',
-            animation: 'float2 25s ease-in-out infinite',
-          }}
-        />
-      </div>
-
-      <div
-        style={{
-          maxWidth: '1280px',
-          margin: '0 auto',
-          padding: '96px 24px',
-          position: 'relative',
-          zIndex: 1,
-        }}
-      >
-        {/* Section label */}
-        <div
-          style={{
-            fontFamily: 'var(--font-space-mono), monospace',
-            fontSize: '10px',
-            letterSpacing: '0.18em',
-            textTransform: 'uppercase',
-            color: 'var(--color-dim)',
-            marginBottom: '24px',
-          }}
-        >
-          06 — Get In Touch
+    <section className="contact-wrap" id="contact">
+      <div className="contact-inner">
+        {/* Big SOCIAL header */}
+        <div className="contact-big">
+          <h2>
+            <span>SOCIAL</span>{' '}
+            <span style={{ color: 'var(--fg-3)' }}>SOCIAL</span>
+          </h2>
         </div>
 
-        {/* Giant heading */}
-        <h2
-          style={{
-            fontFamily: 'var(--font-syne), sans-serif',
-            fontWeight: 800,
-            fontSize: 'clamp(40px, 6vw, 80px)',
-            letterSpacing: '-0.04em',
-            lineHeight: 0.88,
-            color: 'var(--color-text)',
-            margin: '0 0 64px -4px',
-          }}
-        >
-          LET&apos;S BUILD
-          <br />
-          <span style={{ color: 'var(--color-accent)' }}>*</span> SOMETHING
-          <br />
-          GREAT
-        </h2>
-
-        {/* Two-column layout */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '64px',
-            alignItems: 'start',
-          }}
-          className="contact-grid"
-        >
-          {/* Left: contact info + social */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
-            {/* Email */}
-            <div>
-              <div
-                style={{
-                  fontFamily: 'var(--font-space-mono), monospace',
-                  fontSize: '10px',
-                  letterSpacing: '0.15em',
-                  textTransform: 'uppercase',
-                  color: 'var(--color-dim)',
-                  marginBottom: '8px',
-                }}
-              >
-                Email
-              </div>
-              <a
-                href="mailto:jacquespieterse2000@gmail.com"
-                data-cursor="link"
-                style={{
-                  fontFamily: 'var(--font-space-mono), monospace',
-                  fontSize: 'clamp(14px, 1.5vw, 18px)',
-                  color: 'var(--color-text)',
-                  textDecoration: 'none',
-                  borderBottom: '1px solid var(--color-border)',
-                  paddingBottom: '4px',
-                  transition: 'color 0.2s ease, border-color 0.2s ease',
-                  display: 'inline-block',
-                }}
-              >
-                jacquespieterse2000@gmail.com
-              </a>
-            </div>
-
-            {/* Social links */}
-            <div>
-              <div
-                style={{
-                  fontFamily: 'var(--font-space-mono), monospace',
-                  fontSize: '10px',
-                  letterSpacing: '0.15em',
-                  textTransform: 'uppercase',
-                  color: 'var(--color-dim)',
-                  marginBottom: '16px',
-                }}
-              >
-                Social
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {[
-                  { label: 'GitHub', href: 'https://github.com/JacquesPieterse1' },
-                  { label: 'LinkedIn', href: '#' },
-                  { label: 'X / Twitter', href: '#' },
-                ].map(({ label, href }) => (
-                  <a
-                    key={label}
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    data-cursor="link"
-                    style={{
-                      fontFamily: 'var(--font-space-mono), monospace',
-                      fontSize: '13px',
-                      letterSpacing: '0.06em',
-                      color: 'var(--color-muted)',
-                      textDecoration: 'none',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      transition: 'color 0.2s ease',
-                    }}
-                  >
-                    <span style={{ color: 'var(--color-accent)', fontSize: '10px' }}>→</span>
-                    {label}
-                  </a>
-                ))}
-              </div>
-            </div>
-
-            {/* CTA button */}
-            <div>
-              <a
-                href="mailto:jacquespieterse2000@gmail.com"
-                data-cursor="link"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  fontFamily: 'var(--font-syne), sans-serif',
-                  fontWeight: 700,
-                  fontSize: '13px',
-                  letterSpacing: '0.08em',
-                  textTransform: 'uppercase',
-                  color: 'var(--color-accent)',
-                  textDecoration: 'none',
-                  border: '1px solid var(--color-accent)',
-                  borderRadius: '100px',
-                  padding: '14px 32px',
-                  transition: 'background 0.2s ease, color 0.2s ease',
-                }}
-              >
-                Start a Project →
-              </a>
-            </div>
-          </div>
-
-          {/* Right: portrait placeholder */}
-          <div>
-            <div
-              style={{
-                width: '100%',
-                aspectRatio: '4/5',
-                maxWidth: '360px',
-                borderRadius: '8px',
-                overflow: 'hidden',
-                position: 'relative',
-                backgroundColor: 'var(--color-elevated)',
-                border: '1px solid var(--color-border)',
-              }}
-            >
-              <Image
-                src="https://placehold.co/400x500/1a1a1a/444444"
-                alt="Jacques Pieterse"
-                fill
-                sizes="360px"
-                style={{
-                  objectFit: 'cover',
-                }}
-              />
-              {/* Gradient overlay */}
-              <div
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%)',
-                  pointerEvents: 'none',
-                }}
-              />
-            </div>
+        {/* Lead + portrait */}
+        <div className="contact-grid">
+          <p className="contact-lead reveal">
+            <small>And that&apos;s all, folks</small>
+            <span style={{ color: 'var(--accent)', fontWeight: 500 }}>
+              If you want to build something together
+            </span>{' '}
+            — or just say hi — drop me a line. I read everything.
+          </p>
+          <div className="portrait reveal" style={{ ['--rev-delay' as string]: '80ms' }}>
+            <div className="portrait-stripes" />
           </div>
         </div>
-      </div>
 
-      {/* Float keyframes */}
-      <style>{`
-        @keyframes float1 {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          50% { transform: translate(-30px, 20px) scale(1.05); }
-        }
-        @keyframes float2 {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          50% { transform: translate(20px, -30px) scale(1.08); }
-        }
-        @media (max-width: 768px) {
-          .contact-grid {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
+        {/* Magnetic action buttons */}
+        <div className="contact-actions">
+          {ACTIONS.map((action) => (
+            <MagneticButton key={action.label} {...action} />
+          ))}
+        </div>
+
+        {/* Footer meta */}
+        <div className="footer-meta">
+          <span>JACQUES PIETERSE © 2026</span>
+          <span>Site built by me — with care.</span>
+        </div>
+      </div>
     </section>
+  )
+}
+
+function MagneticButton({
+  label,
+  href,
+  ghost,
+}: {
+  label: string
+  href: string
+  ghost: boolean
+}) {
+  const ref = useRef<HTMLAnchorElement>(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+
+    const onMove = (e: MouseEvent) => {
+      const rect = el.getBoundingClientRect()
+      const cx = rect.left + rect.width / 2
+      const cy = rect.top + rect.height / 2
+      el.style.transform = `translate(${(e.clientX - cx) * 0.35}px, ${(e.clientY - cy) * 0.35}px)`
+    }
+    const onLeave = () => { el.style.transform = '' }
+
+    el.addEventListener('mousemove', onMove)
+    el.addEventListener('mouseleave', onLeave)
+    return () => {
+      el.removeEventListener('mousemove', onMove)
+      el.removeEventListener('mouseleave', onLeave)
+    }
+  }, [])
+
+  return (
+    <a
+      ref={ref}
+      href={href}
+      target={href.startsWith('http') ? '_blank' : undefined}
+      rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
+      className={`magnetic${ghost ? ' ghost' : ''}`}
+      data-cursor="hover"
+    >
+      {label}{' '}
+      <span className="arrow">↗</span>
+    </a>
   )
 }

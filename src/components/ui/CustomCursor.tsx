@@ -1,103 +1,69 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { m, useMotionValue, useSpring } from 'framer-motion'
 
+// Pure-DOM cursor: mix-blend-mode difference, always visible on any bg
 export function CustomCursor() {
-  const dotX = useMotionValue(-100)
-  const dotY = useMotionValue(-100)
-
-  const ringSpringConfig = { damping: 40, stiffness: 200, mass: 0.8 }
-
-  const ringX = useSpring(dotX, ringSpringConfig)
-  const ringY = useSpring(dotY, ringSpringConfig)
-
+  const dotRef  = useRef<HTMLDivElement>(null)
   const ringRef = useRef<HTMLDivElement>(null)
-  const isHoveringRef = useRef(false)
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      dotX.set(e.clientX)
-      dotY.set(e.clientY)
+    const dot  = dotRef.current
+    const ring = ringRef.current
+    if (!dot || !ring) return
+
+    // Check for fine pointer (no cursor on touch)
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return
+
+    let raf = 0
+    let mx = -100, my = -100
+    let rx = -100, ry = -100
+
+    const onMove = (e: MouseEvent) => { mx = e.clientX; my = e.clientY }
+
+    const tick = () => {
+      // Dot follows instantly
+      dot.style.transform = `translate(${mx - 3}px, ${my - 3}px)`
+
+      // Ring lerps at 0.18
+      rx += (mx - rx) * 0.18
+      ry += (my - ry) * 0.18
+      ring.style.transform = `translate(${rx - 16}px, ${ry - 16}px)`
+
+      raf = requestAnimationFrame(tick)
     }
 
-    const handleMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement
-      const isLink = target.closest('[data-cursor="link"]') !== null ||
-        target.closest('a') !== null ||
-        target.closest('button') !== null
+    window.addEventListener('mousemove', onMove, { passive: true })
+    raf = requestAnimationFrame(tick)
 
-      if (isLink && !isHoveringRef.current) {
-        isHoveringRef.current = true
-        if (ringRef.current) {
-          ringRef.current.style.width = '48px'
-          ringRef.current.style.height = '48px'
-          ringRef.current.style.opacity = '0.8'
-          ringRef.current.style.marginLeft = '-24px'
-          ringRef.current.style.marginTop = '-24px'
-        }
-      } else if (!isLink && isHoveringRef.current) {
-        isHoveringRef.current = false
-        if (ringRef.current) {
-          ringRef.current.style.width = '28px'
-          ringRef.current.style.height = '28px'
-          ringRef.current.style.opacity = '0.4'
-          ringRef.current.style.marginLeft = '-14px'
-          ringRef.current.style.marginTop = '-14px'
-        }
+    // Hover state for interactive elements
+    const onOver = (e: MouseEvent) => {
+      const target = e.target as HTMLElement
+      const isInteractive =
+        target.closest('a') !== null ||
+        target.closest('button') !== null ||
+        target.closest('[data-cursor="hover"]') !== null
+
+      if (isInteractive) {
+        ring.classList.add('hovering')
+      } else {
+        ring.classList.remove('hovering')
       }
     }
 
-    window.addEventListener('mousemove', handleMouseMove)
-    window.addEventListener('mouseover', handleMouseOver)
+    window.addEventListener('mouseover', onOver, { passive: true })
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove)
-      window.removeEventListener('mouseover', handleMouseOver)
+      window.removeEventListener('mousemove', onMove)
+      window.removeEventListener('mouseover', onOver)
+      cancelAnimationFrame(raf)
     }
-  }, [dotX, dotY])
+  }, [])
 
   return (
     <>
-      {/* Dot */}
-      <m.div
-        style={{
-          x: dotX,
-          y: dotY,
-          position: 'fixed',
-          width: '6px',
-          height: '6px',
-          borderRadius: '50%',
-          backgroundColor: 'var(--color-accent)',
-          marginLeft: '-3px',
-          marginTop: '-3px',
-          pointerEvents: 'none',
-          zIndex: 10000,
-          top: 0,
-          left: 0,
-        }}
-      />
-      {/* Ring */}
-      <m.div
-        ref={ringRef}
-        style={{
-          x: ringX,
-          y: ringY,
-          position: 'fixed',
-          width: '28px',
-          height: '28px',
-          borderRadius: '50%',
-          border: '1px solid var(--color-accent)',
-          opacity: 0.4,
-          marginLeft: '-14px',
-          marginTop: '-14px',
-          pointerEvents: 'none',
-          zIndex: 9999,
-          top: 0,
-          left: 0,
-          transition: 'width 0.2s ease, height 0.2s ease, opacity 0.2s ease, margin 0.2s ease',
-        }}
-      />
+      <div ref={ringRef} className="cursor-ring" aria-hidden="true" />
+      <div ref={dotRef}  className="cursor-dot"  aria-hidden="true" />
     </>
   )
 }

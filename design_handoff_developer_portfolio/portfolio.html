@@ -1,0 +1,1500 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Jacques Pieterse — Full-Stack Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script>
+// Persisted defaults — host rewrites this block on tweak changes
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "theme": "light"
+}/*EDITMODE-END*/;
+
+// Apply theme ASAP to avoid FOUC
+(function(){
+  try {
+    const stored = localStorage.getItem('jp.theme');
+    const theme = stored || TWEAK_DEFAULTS.theme || 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+  } catch(e){}
+})();
+</script>
+
+<style>
+  :root {
+    --bg: #f6f5f1;
+    --bg-2: #ecebe6;
+    --fg: #0a0a0a;
+    --fg-2: #4a4a47;
+    --fg-3: #8a8a85;
+    --line: #d8d6cf;
+    --accent: #5b8cff;
+    --card: #ffffff;
+
+    --font-display: "Geist", ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+    --gutter: clamp(16px, 2.4vw, 36px);
+    --rail: clamp(40px, 4.5vw, 72px); /* vertical-label rail width */
+    --maxw: 1480px;
+  }
+  [data-theme="dark"] {
+    --bg: #0a0a0a;
+    --bg-2: #131312;
+    --fg: #f6f5f1;
+    --fg-2: #bdbcb6;
+    --fg-3: #6e6e69;
+    --line: #242422;
+    --card: #131312;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { background: var(--bg); }
+  body {
+    font-family: var(--font-display);
+    color: var(--fg);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "ss01", "ss02", "cv11";
+    transition: background-color .35s ease, color .35s ease;
+    cursor: none;
+  }
+  @media (hover: none) {
+    body { cursor: auto; }
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: none; }
+
+  /* Selection */
+  ::selection { background: var(--accent); color: #fff; }
+
+  /* ——— Custom cursor ——— */
+  .cursor-dot, .cursor-ring {
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%);
+    will-change: transform;
+    mix-blend-mode: difference;
+  }
+  .cursor-dot {
+    width: 6px; height: 6px;
+    background: #fff;
+    border-radius: 50%;
+  }
+  .cursor-ring {
+    width: 32px; height: 32px;
+    border: 1px solid #fff;
+    border-radius: 50%;
+    transition: width .25s ease, height .25s ease, background-color .2s ease;
+  }
+  .cursor-ring.hover {
+    width: 56px; height: 56px;
+    background: rgba(255,255,255,.08);
+  }
+  @media (hover: none) { .cursor-dot, .cursor-ring { display: none; } }
+
+  /* ——— Nav ——— */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px var(--gutter);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: .02em;
+    pointer-events: none;
+  }
+  .nav > * { pointer-events: auto; }
+  .nav .mark {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 14px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--bg) 80%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+  .nav .mark .brace { color: var(--accent); font-weight: 700; }
+  .nav-links {
+    display: flex; gap: 6px;
+  }
+  .nav-link {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 14px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--bg) 80%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    text-transform: uppercase;
+    transition: background .2s ease, color .2s ease, border-color .2s ease;
+  }
+  .nav-link:hover { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+  .nav-link .arrow { display: inline-block; transition: transform .2s ease; }
+  .nav-link:hover .arrow { transform: translateX(2px); }
+
+  /* ——— Section frame ——— */
+  .section {
+    position: relative;
+    padding: var(--gutter);
+  }
+  .section-inner {
+    border: 1px solid var(--line);
+    background: var(--card);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+  .rail {
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    border-right: 1px solid var(--line);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--fg-3);
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+  .rail .rail-label {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+  }
+
+  /* ——— Hero ——— */
+  .hero {
+    padding-top: 78px;
+  }
+  .hero-inner {
+    min-height: calc(100vh - 78px - var(--gutter));
+    padding: 0;
+    display: grid;
+    grid-template-columns: var(--rail) 1fr;
+  }
+  .hero-stage {
+    position: relative;
+    padding: 36px 36px 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 28px;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+  .hero-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(64px, 13.4vw, 240px);
+    line-height: .88;
+    letter-spacing: -.04em;
+    margin: 0;
+    color: var(--fg);
+    overflow: hidden;
+    width: 100%;
+    white-space: nowrap;
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent);
+            mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent);
+  }
+  .hero-title-track {
+    display: inline-flex;
+    align-items: center;
+    gap: .35em;
+    animation: heroSlide 22s linear infinite;
+    will-change: transform;
+    padding-right: .35em;
+  }
+  .hero-title-group {
+    display: inline-flex;
+    align-items: center;
+    gap: .35em;
+    flex-shrink: 0;
+  }
+  @keyframes heroSlide {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  .hero-title:hover .hero-title-track { animation-play-state: paused; }
+  .hero-title .dim { color: var(--fg-3); }
+  .hero-title .brace {
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-weight: 400;
+    padding: 0 .04em;
+  }
+  .hero-title .star {
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-weight: 400;
+    font-size: .85em;
+    transform: translateY(-.05em);
+    display: inline-block;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(220px, 320px) 1fr;
+    gap: 24px;
+    align-items: stretch;
+  }
+  .hero-intro {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.55;
+    text-transform: uppercase;
+    letter-spacing: .02em;
+    color: var(--fg);
+    align-self: end;
+    max-width: 320px;
+  }
+  .hero-intro .em { color: var(--accent); }
+  .hero-visual {
+    position: relative;
+    min-height: 360px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 1px;
+    background-color: var(--line);
+  }
+  .hero-visual .cell {
+    background: var(--bg-2);
+    position: relative;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--fg-3);
+    padding: 8px;
+    overflow: hidden;
+  }
+  .hero-visual .cell.dark { background: var(--fg); color: var(--bg); }
+  .hero-visual .cell.accent { background: var(--accent); color: #fff; }
+  .hero-visual .cell .big {
+    font-family: var(--font-display);
+    font-size: clamp(32px, 4.4vw, 64px);
+    font-weight: 600;
+    letter-spacing: -.04em;
+    line-height: 1;
+    position: absolute; left: 8px; bottom: 8px;
+  }
+  .hero-visual .cell .stripes {
+    position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(135deg, var(--line) 0 1px, transparent 1px 8px);
+    opacity: .6;
+  }
+  .hero-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--fg-3);
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    gap: 24px;
+  }
+  .hero-meta .scroll-cue {
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .hero-meta .scroll-cue .dot {
+    width: 6px; height: 6px; background: var(--accent); border-radius: 50%;
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: .4; transform: scale(.7); }
+  }
+
+  /* ——— About ——— */
+  .about-inner {
+    display: grid;
+    grid-template-columns: var(--rail) 1fr;
+    min-height: 460px;
+  }
+  .about-rail {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    border-right: 1px solid var(--line);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--fg-3);
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+  .about-rail-mark {
+    display: grid;
+    place-items: center;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--font-mono);
+    font-weight: 400;
+    font-size: 40px;
+    color: var(--fg);
+    letter-spacing: -.04em;
+  }
+  .about-rail-mark span { color: var(--accent); }
+  .about-rail-label {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
+  }
+  .about-rail-label .rotated {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+  }
+  .about-rail-label .ix {
+    position: absolute;
+    bottom: 18px;
+    left: 0; right: 0;
+    text-align: center;
+    font-size: 10px;
+    color: var(--fg-3);
+  }
+  .about-body {
+    padding: 28px 56px 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    align-self: center;
+  }
+  .about-tagline {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    color: var(--fg);
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--line);
+  }
+  .about-tagline .plus { color: var(--fg); margin-right: 12px; }
+  .about-text {
+    font-family: var(--font-display);
+    font-size: clamp(22px, 2.1vw, 32px);
+    line-height: 1.35;
+    letter-spacing: -.018em;
+    max-width: 880px;
+    text-wrap: pretty;
+    margin: 0;
+  }
+  .about-text strong { font-weight: 600; }
+  .about-text .em { color: var(--accent); font-weight: 500; }
+
+  /* ——— Big section header (WORK) ——— */
+  .work-section {
+    padding: var(--gutter);
+    padding-bottom: 0;
+  }
+  .work-inner {
+    border: 1px solid var(--line);
+    background: var(--card);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .work-header {
+    position: relative;
+    padding: 64px 36px 32px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .work-header h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(80px, 18vw, 320px);
+    line-height: .82;
+    letter-spacing: -.05em;
+    font-weight: 600;
+    white-space: nowrap;
+    flex: 1;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, #000 0, #000 92%, transparent);
+            mask-image: linear-gradient(to right, #000 0, #000 92%, transparent);
+  }
+  .work-header h2 .dim { color: var(--fg-3); }
+  .work-header .star {
+    font-family: var(--font-mono);
+    color: var(--accent);
+    font-size: clamp(56px, 9vw, 140px);
+    line-height: 1;
+    transform: translateY(.04em);
+    flex-shrink: 0;
+  }
+
+  /* ——— Marquee strip (dark band inside Work) ——— */
+  .marquee {
+    background: var(--fg);
+    color: var(--bg);
+    padding: 18px 0;
+    overflow: hidden;
+    display: flex;
+    gap: 56px;
+    position: relative;
+  }
+  .marquee-track {
+    display: flex; gap: 56px;
+    animation: marquee 38s linear infinite;
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding-right: 56px;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-100%); }
+  }
+  .marquee-item {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 28px;
+    letter-spacing: -.02em;
+    display: inline-flex; align-items: center; gap: 24px;
+    color: var(--bg);
+  }
+  .marquee-item .dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--accent);
+  }
+  .marquee-item.muted { color: color-mix(in oklab, var(--bg) 55%, transparent); }
+
+  /* ——— Project cards ——— */
+  .work {
+    padding: 0 var(--gutter) var(--gutter);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gutter);
+  }
+  .project {
+    border: 1px solid var(--line);
+    background: var(--card);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1.9fr;
+    grid-template-rows: 1fr auto;
+    min-height: 460px;
+  }
+  .project-info {
+    grid-column: 1; grid-row: 1;
+    padding: 32px;
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+    gap: 24px;
+    background: var(--bg-2);
+    border-right: 1px solid var(--line);
+  }
+  .project-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 14px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .04em;
+    color: var(--fg);
+    align-self: flex-start;
+    text-transform: none;
+  }
+  .project-tag .brace { color: var(--accent); font-weight: 700; }
+  .project-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(28px, 2.6vw, 40px);
+    line-height: 1.02;
+    letter-spacing: -.025em;
+    margin: 0;
+    text-transform: uppercase;
+    color: var(--fg);
+  }
+  .project-visual {
+    grid-column: 2; grid-row: 1;
+    background: #0a0a0a;
+    color: #f6f5f1;
+    position: relative;
+    overflow: hidden;
+    padding: 28px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    align-items: stretch;
+  }
+  .project-meta {
+    grid-column: 1 / -1; grid-row: 2;
+    border-top: 1px solid var(--line);
+    padding: 16px 32px;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 24px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--fg-2);
+    background: var(--card);
+  }
+  .project-meta .stack { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .project-meta .stack span { position: relative; }
+  .project-meta .stack span + span::before { content: "/"; color: var(--line); padding-right: 12px; }
+
+  /* Mini thumb tiles inside .project-visual */
+  .thumb {
+    background: #131312;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 360px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+  .thumb-header {
+    padding: 14px 14px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(246,245,241,.55);
+    font-size: 10px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .thumb-header b { color: #f6f5f1; font-family: var(--font-display); font-weight: 500; font-size: 12px; letter-spacing: 0; text-transform: none; }
+  .thumb-body { flex: 1; padding: 14px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; }
+  .thumb-headline {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1.02;
+    letter-spacing: -.02em;
+    color: #f6f5f1;
+  }
+  .thumb-headline .accent { color: var(--accent); }
+  .thumb-footer {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: rgba(246,245,241,.55);
+    letter-spacing: .04em;
+  }
+  .thumb.accent { background: #0d1a3a; border-color: rgba(91,140,255,.25); }
+  .thumb.glow {
+    background: radial-gradient(circle at 70% 80%, rgba(91,140,255,.35), transparent 60%), #0a0a0a;
+  }
+  .thumb .stripes-dark {
+    position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(135deg, rgba(255,255,255,.04) 0 1px, transparent 1px 8px);
+    pointer-events: none;
+  }
+  .thumb .mark {
+    position: absolute;
+    inset: 0;
+    display: grid; place-items: center;
+    font-family: var(--font-mono);
+    font-size: 84px;
+    color: rgba(246,245,241,.92);
+    font-weight: 400;
+    letter-spacing: -.05em;
+  }
+  .thumb .mark.accent-mark { color: var(--accent); }
+  .thumb .grid-lines {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
+    background-size: 16px 16px;
+    pointer-events: none;
+  }
+
+  /* Project art — code editor look */
+  .art-editor {
+    position: relative;
+    width: 86%; height: 78%;
+    background: var(--fg);
+    color: var(--bg);
+    border-radius: 8px;
+    box-shadow: 0 24px 60px -24px rgba(0,0,0,.4);
+    overflow: hidden;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  [data-theme="dark"] .art-editor {
+    box-shadow: 0 24px 60px -24px rgba(0,0,0,.8), 0 0 0 1px var(--line);
+  }
+  .art-editor-bar {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+    font-size: 10px; opacity: .7;
+  }
+  .art-editor-bar .lights { display: inline-flex; gap: 6px; }
+  .art-editor-bar .lights i { width: 8px; height: 8px; border-radius: 50%; background: #4a4a47; display: block; }
+  .art-editor-body { padding: 14px 16px; }
+  .art-editor-body .ln { display: block; opacity: .9; }
+  .art-editor-body .kw { color: #c084fc; }
+  .art-editor-body .fn { color: #5b8cff; }
+  .art-editor-body .str { color: #a3e635; }
+  .art-editor-body .num { color: #fbbf24; }
+  .art-editor-body .cm { color: #71717a; }
+  .art-editor-body .ind { display: inline-block; width: 20px; }
+
+  /* Project art — dashboard */
+  .art-dash {
+    position: relative;
+    width: 88%; height: 78%;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    box-shadow: 0 24px 60px -24px rgba(0,0,0,.25);
+    padding: 16px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto auto 1fr;
+    gap: 12px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--fg-2);
+  }
+  .art-dash .stat { border: 1px solid var(--line); padding: 8px; border-radius: 4px; }
+  .art-dash .stat b { display: block; font-family: var(--font-display); font-size: 22px; letter-spacing: -.02em; color: var(--fg); font-weight: 600; margin-top: 4px; }
+  .art-dash .chart { grid-column: 1 / -1; border: 1px solid var(--line); border-radius: 4px; padding: 8px; position: relative; min-height: 100px; }
+  .art-dash .chart svg { width: 100%; height: 100%; display: block; }
+
+  /* Project art — phone */
+  .art-phone {
+    position: relative;
+    width: 200px; height: 380px;
+    background: var(--fg);
+    border-radius: 28px;
+    padding: 8px;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,.35);
+  }
+  .art-phone-screen {
+    width: 100%; height: 100%;
+    background: var(--bg);
+    border-radius: 22px;
+    overflow: hidden;
+    position: relative;
+    padding: 24px 16px 16px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--fg);
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .art-phone-screen .notch {
+    position: absolute; top: 6px; left: 50%; transform: translateX(-50%);
+    width: 70px; height: 16px; background: var(--fg); border-radius: 12px;
+  }
+  .art-phone-screen .card-row {
+    border: 1px solid var(--line); border-radius: 10px;
+    padding: 10px; display: flex; flex-direction: column; gap: 4px;
+  }
+  .art-phone-screen .card-row b { font-family: var(--font-display); font-size: 16px; letter-spacing: -.02em; font-weight: 600; }
+  .art-phone-screen .pill {
+    background: var(--accent); color: #fff;
+    align-self: flex-start;
+    padding: 4px 8px; border-radius: 999px;
+  }
+
+  /* Project art — system diagram */
+  .art-system {
+    position: relative;
+    width: 88%; height: 78%;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 16px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--fg);
+    box-shadow: 0 24px 60px -24px rgba(0,0,0,.25);
+  }
+  .art-system .node {
+    border: 1px solid var(--line); border-radius: 4px;
+    padding: 10px; display: flex; flex-direction: column; gap: 4px;
+    background: var(--bg-2);
+    position: relative; z-index: 2;
+  }
+  .art-system .node b { font-family: var(--font-display); font-size: 14px; font-weight: 600; letter-spacing: -.01em; }
+  .art-system .node small { color: var(--fg-3); font-size: 9px; text-transform: uppercase; letter-spacing: .1em; }
+  .art-system .node.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .art-system .node.primary small { color: rgba(255,255,255,.7); }
+  .art-system .lines { position: absolute; inset: 20px; pointer-events: none; }
+
+  /* ——— Focus ——— */
+  .focus-inner {
+    display: grid;
+    grid-template-columns: var(--rail) 1fr;
+    min-height: 580px;
+  }
+  .focus-rail {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    border-right: 1px solid var(--line);
+  }
+  .focus-rail .top {
+    border-bottom: 1px solid var(--line);
+  }
+  .focus-rail .bottom {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--fg-3);
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+  .focus-rail .bottom .rotated {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    color: var(--fg);
+  }
+  .focus-rail .bottom .ix {
+    position: absolute;
+    bottom: 18px;
+    left: 0; right: 0;
+    text-align: center;
+    font-size: 10px;
+    color: var(--fg-3);
+  }
+  .focus-body {
+    padding: 56px 64px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 48px;
+    align-content: center;
+  }
+  .pillar .icon {
+    width: 36px; height: 36px;
+    display: grid; place-items: center;
+    color: var(--fg);
+    margin-bottom: 24px;
+  }
+  .pillar .icon svg { width: 100%; height: 100%; display: block; }
+  .pillar h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: 0;
+    margin: 0 0 28px;
+    line-height: 1.2;
+    text-transform: uppercase;
+    color: var(--fg);
+  }
+  .pillar ul {
+    list-style: none; margin: 0; padding: 0;
+    font-family: var(--font-display);
+    font-size: 14px;
+    color: var(--fg);
+    display: flex; flex-direction: column; gap: 6px;
+    line-height: 1.45;
+  }
+  .pillar ul li::before { content: ""; }
+
+  /* ——— Live code demo ——— */
+  .demo {
+    padding: 0 var(--gutter) var(--gutter);
+  }
+  .demo-inner {
+    position: relative;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: var(--card);
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: var(--rail) 1fr;
+  }
+  .demo-body {
+    padding: 36px 40px;
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+  .demo-lead {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    color: var(--fg-3);
+  }
+  .demo-lead::before { content: "[+] "; color: var(--fg); }
+  .demo-lead h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 28px;
+    letter-spacing: -.02em;
+    line-height: 1.1;
+    color: var(--fg);
+    text-transform: none;
+    margin: 12px 0 12px;
+    letter-spacing: -.02em;
+  }
+  .demo-lead p {
+    font-family: var(--font-display);
+    font-size: 14px;
+    color: var(--fg-2);
+    line-height: 1.5;
+    text-transform: none;
+    letter-spacing: 0;
+    margin: 0;
+  }
+  .terminal {
+    background: var(--fg);
+    color: var(--bg);
+    border-radius: 8px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.7;
+    overflow: hidden;
+    box-shadow: 0 30px 80px -30px rgba(0,0,0,.4);
+  }
+  .terminal-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    font-size: 11px;
+  }
+  .terminal-bar .lights { display: flex; gap: 6px; }
+  .terminal-bar .lights i { width: 10px; height: 10px; border-radius: 50%; background: #3a3a37; display: block; }
+  .terminal-bar .path { opacity: .55; font-size: 11px; }
+  .terminal-body {
+    padding: 18px 20px;
+    min-height: 280px;
+    white-space: pre;
+    overflow-x: auto;
+  }
+  .terminal-body .prompt { color: var(--accent); }
+  .terminal-body .kw { color: #c084fc; }
+  .terminal-body .fn { color: #5b8cff; }
+  .terminal-body .str { color: #a3e635; }
+  .terminal-body .num { color: #fbbf24; }
+  .terminal-body .cm { color: #71717a; }
+  .terminal-body .punct { color: #c4c4c0; }
+  .terminal-cursor {
+    display: inline-block; width: 8px; height: 1em;
+    background: var(--bg); vertical-align: -2px;
+    margin-left: 2px;
+    animation: blink 1s steps(2, end) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* ——— Contact ——— */
+  .contact {
+    padding: 0 var(--gutter) var(--gutter);
+  }
+  .contact-inner {
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: var(--card);
+    overflow: hidden;
+    padding: 0;
+  }
+  .contact-big {
+    padding: 48px 40px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .contact-big h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(72px, 18vw, 320px);
+    line-height: .82;
+    letter-spacing: -.05em;
+    white-space: nowrap;
+  }
+  .contact-big h2 .dim { color: var(--fg-3); }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 40px;
+    padding: 24px 40px 36px;
+    align-items: end;
+    border-top: 1px solid var(--line);
+  }
+  .contact-lead {
+    font-family: var(--font-display);
+    font-size: clamp(20px, 1.8vw, 28px);
+    line-height: 1.3;
+    letter-spacing: -.015em;
+    max-width: 640px;
+  }
+  .contact-lead .em { color: var(--accent); font-weight: 500; }
+  .contact-lead small {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    color: var(--fg-3);
+    margin-bottom: 12px;
+  }
+  .contact-lead small::before { content: "[+] "; color: var(--fg); }
+  .portrait {
+    width: 240px; height: 240px;
+    border-radius: 4px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    overflow: hidden;
+    position: relative;
+    justify-self: end;
+  }
+  .portrait::after {
+    content: "PORTRAIT";
+    position: absolute; inset: 0;
+    display: grid; place-items: center;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .2em;
+    color: var(--fg-3);
+  }
+  .portrait .stripes {
+    position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(135deg, var(--line) 0 1px, transparent 1px 10px);
+  }
+  .contact-actions {
+    display: flex; gap: 10px; flex-wrap: wrap;
+    padding: 0 40px 40px;
+    border-top: 1px solid var(--line);
+    padding-top: 24px;
+    margin-top: 8px;
+  }
+  .magnetic {
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 14px 22px;
+    border: 1px solid var(--fg);
+    background: var(--fg);
+    color: var(--bg);
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    transition: background .2s ease, color .2s ease;
+    will-change: transform;
+  }
+  .magnetic:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .magnetic .arrow { display: inline-block; transition: transform .3s ease; }
+  .magnetic:hover .arrow { transform: translate(2px, -2px); }
+  .magnetic.ghost { background: transparent; color: var(--fg); }
+  .magnetic.ghost:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .footer-meta {
+    padding: 16px 40px;
+    border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    color: var(--fg-3);
+  }
+
+  /* ——— Reveal on scroll ——— */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1);
+    transition-delay: var(--rev-delay, 0ms);
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ——— Responsive ——— */
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-visual { min-height: 240px; }
+    .about-body { padding: 28px; gap: 18px; }
+    .about-inner { grid-template-columns: 1fr; min-height: 0; }
+    .about-rail { display: none; }
+    .project, .project:nth-child(even) { grid-template-columns: 1fr; }
+    .project { min-height: 0; }
+    .project-info { border-right: 0; border-bottom: 1px solid var(--line); padding: 24px; }
+    .project-visual { grid-template-columns: 1fr; grid-column: 1; grid-row: 2; padding: 20px; gap: 12px; }
+    .project-meta { grid-row: 3; padding: 14px 24px; flex-wrap: wrap; gap: 12px; }
+    .thumb { min-height: 200px; }
+    .focus-body { grid-template-columns: 1fr 1fr; padding: 32px; gap: 32px; }
+    .focus-rail { display: none; }
+    .demo-body { grid-template-columns: 1fr; padding: 28px; gap: 24px; }
+    .contact-grid { grid-template-columns: 1fr; padding: 24px 28px; }
+    .portrait { justify-self: start; width: 180px; height: 180px; }
+    .contact-actions, .footer-meta { padding-left: 28px; padding-right: 28px; }
+    .hero-stage { padding: 24px; }
+    .rail { display: none; }
+    .hero-inner, .about-inner, .focus-inner, .demo-inner { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <!-- Custom cursor -->
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+
+  <!-- Nav -->
+  <nav class="nav">
+    <a href="#home" class="mark" data-cursor="hover">JACQUES<span class="brace">{ }</span>DEV</a>
+    <div class="nav-links">
+      <a href="#work" class="nav-link" data-cursor="hover">Work <span class="arrow">↓</span></a>
+      <a href="#contact" class="nav-link" data-cursor="hover">About <span class="arrow">→</span></a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="section hero" id="home">
+    <div class="section-inner hero-inner">
+      <aside class="rail">
+        <span class="rail-label">[00] / Home</span>
+        <span class="rail-label">2026 ©</span>
+      </aside>
+      <div class="hero-stage">
+        <h1 class="hero-title" aria-label="Jacques Pieterse — Full-Stack Developer">
+          <span class="hero-title-track" aria-hidden="true">
+            <span class="hero-title-group">
+              <span>JACQUES</span>
+              <span class="star">*</span>
+              <span class="dim">PIETERSE</span>
+              <span class="brace">{ }</span>
+              <span>FULL-STACK</span>
+              <span class="star">*</span>
+              <span class="dim">DEVELOPER</span>
+              <span class="brace">{ }</span>
+            </span>
+            <span class="hero-title-group" aria-hidden="true">
+              <span>JACQUES</span>
+              <span class="star">*</span>
+              <span class="dim">PIETERSE</span>
+              <span class="brace">{ }</span>
+              <span>FULL-STACK</span>
+              <span class="star">*</span>
+              <span class="dim">DEVELOPER</span>
+              <span class="brace">{ }</span>
+            </span>
+          </span>
+        </h1>
+
+        <div class="hero-grid">
+          <p class="hero-intro reveal">
+            HEY — YOU MADE IT. I'M <span class="em">JACQUES, A FULL-STACK DEV</span> SHIPPING REAL PRODUCTS FROM CAPE TOWN. SCROLL ↓ FOR THE GOODS.
+          </p>
+          <div class="hero-visual reveal" style="--rev-delay: 120ms">
+            <div class="cell" style="grid-column: 1 / span 2; grid-row: 1 / span 2;">
+              <span>$ ./run --portfolio</span>
+              <span class="big">JP*</span>
+            </div>
+            <div class="cell dark" style="grid-column: 3 / span 2; grid-row: 1 / span 2;">
+              <span>// stack</span>
+              <span class="big">TS · GO</span>
+            </div>
+            <div class="cell" style="grid-column: 5 / span 2; grid-row: 1 / span 3;">
+              <div class="stripes"></div>
+              <span style="position: relative;">/* product shot */</span>
+            </div>
+            <div class="cell accent" style="grid-column: 1 / span 3; grid-row: 3 / span 2;">
+              <span>02+ YEARS</span>
+              <span class="big">SHIPPING</span>
+            </div>
+            <div class="cell" style="grid-column: 4 / span 2; grid-row: 3 / span 1;">
+              <span>CPT · ZA</span>
+            </div>
+            <div class="cell dark" style="grid-column: 4 / span 1; grid-row: 4 / span 1;">
+              <span>{ }</span>
+            </div>
+            <div class="cell" style="grid-column: 5 / span 2; grid-row: 4 / span 1;">
+              <span>↘ scroll</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-meta">
+          <span>FULL-STACK · WEB · MOBILE · PLATFORM</span>
+          <span class="scroll-cue"><span class="dot"></span> SCROLL TO EXPLORE</span>
+          <span>[00 / 05]</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="section" id="about">
+    <div class="section-inner about-inner">
+      <aside class="about-rail">
+        <div class="about-rail-mark"><span>{</span>&nbsp;<span>}</span></div>
+        <div class="about-rail-label">
+          <span class="rotated">About</span>
+          <span class="ix">[00 -1]</span>
+        </div>
+      </aside>
+      <div class="about-body">
+        <div class="about-tagline reveal"><span class="plus">[ + ]</span> A bit more about yours truly</div>
+        <p class="about-text reveal" style="--rev-delay: 80ms">
+          Hi, I'm <strong>Jacques, a Full-Stack Developer</strong> based in Cape Town with 2+ years building production software — from internal tooling and platform services at <span class="em">4Sight Holdings</span> to mobile apps and web frontends. I care about clean systems, tight interfaces, and code that ships on time and doesn't fall over.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section class="work-section" id="work">
+    <div class="work-inner">
+      <div class="marquee" aria-hidden="true">
+        <div class="marquee-track">
+          <span class="marquee-item">TypeScript <span class="dot"></span></span>
+          <span class="marquee-item muted">React</span>
+          <span class="marquee-item">Next.js <span class="dot"></span></span>
+          <span class="marquee-item muted">Node</span>
+          <span class="marquee-item">Go <span class="dot"></span></span>
+          <span class="marquee-item muted">PostgreSQL</span>
+          <span class="marquee-item">React Native <span class="dot"></span></span>
+          <span class="marquee-item muted">Docker</span>
+          <span class="marquee-item">AWS <span class="dot"></span></span>
+          <span class="marquee-item muted">Redis</span>
+          <span class="marquee-item">GraphQL <span class="dot"></span></span>
+          <span class="marquee-item muted">Tailwind</span>
+        </div>
+        <div class="marquee-track" aria-hidden="true">
+          <span class="marquee-item">TypeScript <span class="dot"></span></span>
+          <span class="marquee-item muted">React</span>
+          <span class="marquee-item">Next.js <span class="dot"></span></span>
+          <span class="marquee-item muted">Node</span>
+          <span class="marquee-item">Go <span class="dot"></span></span>
+          <span class="marquee-item muted">PostgreSQL</span>
+          <span class="marquee-item">React Native <span class="dot"></span></span>
+          <span class="marquee-item muted">Docker</span>
+          <span class="marquee-item">AWS <span class="dot"></span></span>
+          <span class="marquee-item muted">Redis</span>
+          <span class="marquee-item">GraphQL <span class="dot"></span></span>
+          <span class="marquee-item muted">Tailwind</span>
+        </div>
+      </div>
+      <div class="work-header">
+        <h2><span>WORK</span> <span class="dim">WORK</span></h2>
+        <span class="star">*</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="work">
+    <article class="project reveal">
+      <div class="project-info">
+        <span class="project-tag"><span class="brace">{ }</span> FLUX</span>
+        <h3 class="project-title">REAL-TIME OPS<br>DASHBOARD</h3>
+      </div>
+      <div class="project-visual">
+        <div class="thumb">
+          <div class="thumb-header"><span class="brace" style="color: var(--accent);">{ }</span> <b>flux</b></div>
+          <div class="thumb-body">
+            <div class="thumb-headline">Ship faster, <span class="accent">see it live.</span></div>
+            <div class="thumb-footer">Real-time event stream · 99.98% uptime</div>
+          </div>
+        </div>
+        <div class="thumb accent">
+          <div class="thumb-header"><span class="brace" style="color: var(--accent);">{ }</span> <b>metrics</b></div>
+          <div class="thumb-body" style="justify-content: center; align-items: center; text-align: center;">
+            <div style="font-family: var(--font-display); font-weight: 700; font-size: 48px; letter-spacing: -.04em; line-height: 1;">4.2<span style="font-size: 22px; color: rgba(246,245,241,.55);">k</span></div>
+            <div class="thumb-footer">events / second</div>
+          </div>
+          <svg viewBox="0 0 300 60" preserveAspectRatio="none" style="width:100%; height:60px;">
+            <polyline fill="none" stroke="#5b8cff" stroke-width="1.6"
+              points="0,48 30,40 60,44 90,32 120,36 150,22 180,28 210,18 240,22 270,10 300,16"/>
+          </svg>
+        </div>
+        <div class="thumb glow">
+          <div class="thumb-header"><span class="brace" style="color: var(--accent);">{ }</span> <b>console</b></div>
+          <div class="thumb-body" style="font-family: var(--font-mono); font-size: 11px; line-height: 1.7;">
+            <div>
+              <div style="color: rgba(246,245,241,.55);">$ flux deploy --prod</div>
+              <div style="color: var(--accent);">→ building...</div>
+              <div style="color: #a3e635;">✓ deployed to edge</div>
+              <div style="color: rgba(246,245,241,.55);">142ms p95</div>
+            </div>
+            <div class="thumb-footer">Live in 18 seconds</div>
+          </div>
+        </div>
+      </div>
+      <div class="project-meta">
+        <div class="stack"><span>Digital</span><span>Real-time</span><span>Platform</span></div>
+        <span>2025</span>
+      </div>
+    </article>
+
+    <article class="project reveal">
+      <div class="project-info">
+        <span class="project-tag"><span class="brace">{ }</span> ATLAS</span>
+        <h3 class="project-title">FLEET TRACKING<br>MOBILE APP</h3>
+      </div>
+      <div class="project-visual">
+        <div class="thumb">
+          <div class="thumb-header"><span class="brace" style="color: var(--accent);">{ }</span> <b>atlas</b></div>
+          <div class="thumb-body">
+            <div class="thumb-headline">Every vehicle. <span class="accent">One screen.</span></div>
+            <div class="thumb-footer">24 active · live GPS</div>
+          </div>
+        </div>
+        <div class="thumb" style="background: #131312; display: grid; place-items: center;">
+          <div class="grid-lines"></div>
+          <div style="position: relative; display: flex; flex-direction: column; gap: 8px; padding: 12px;">
+            <div style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--accent); color: #fff; border-radius: 999px; font-size: 11px;">
+              <span>TR-024</span><span>→ 2.4km</span>
+            </div>
+            <div style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; background: rgba(255,255,255,.08); border-radius: 999px; font-size: 11px; color: rgba(246,245,241,.7);">
+              <span>TR-118</span><span>idle</span>
+            </div>
+            <div style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; background: rgba(255,255,255,.08); border-radius: 999px; font-size: 11px; color: rgba(246,245,241,.7);">
+              <span>TR-301</span><span>→ dock 3</span>
+            </div>
+          </div>
+        </div>
+        <div class="thumb accent" style="display: grid; place-items: center;">
+          <div style="text-align: center; padding: 12px;">
+            <div style="font-family: var(--font-display); font-weight: 700; font-size: 56px; letter-spacing: -.04em; line-height: 1; color: #f6f5f1;">24</div>
+            <div style="font-family: var(--font-mono); font-size: 10px; color: rgba(246,245,241,.55); letter-spacing: .08em; margin-top: 4px;">ACTIVE VEHICLES</div>
+            <div style="font-family: var(--font-mono); font-size: 10px; color: var(--accent); letter-spacing: .04em; margin-top: 18px;">● Online</div>
+          </div>
+        </div>
+      </div>
+      <div class="project-meta">
+        <div class="stack"><span>Mobile</span><span>Real-time</span><span>GraphQL</span></div>
+        <span>2024</span>
+      </div>
+    </article>
+
+    <article class="project reveal">
+      <div class="project-info">
+        <span class="project-tag"><span class="brace">{ }</span> CIPHER</span>
+        <h3 class="project-title">AUTH &amp; RBAC<br>MICROSERVICE</h3>
+      </div>
+      <div class="project-visual">
+        <div class="thumb">
+          <div class="thumb-header"><span class="brace" style="color: var(--accent);">{ }</span> <b>cipher</b></div>
+          <div class="thumb-body">
+            <div class="thumb-headline">Identity <span class="accent">at the edge.</span></div>
+            <div class="thumb-footer">SSO · RBAC · audit logs</div>
+          </div>
+        </div>
+        <div class="thumb glow" style="display: grid; place-items: center; padding: 14px;">
+          <div class="mark accent-mark" style="position: static; font-size: 100px; line-height: 1;">{ }</div>
+        </div>
+        <div class="thumb" style="font-family: var(--font-mono); font-size: 10px;">
+          <div class="thumb-header"><span class="brace" style="color: var(--accent);">{ }</span> <b>token.go</b></div>
+          <div class="thumb-body" style="line-height: 1.6;">
+            <div>
+              <div style="color: rgba(246,245,241,.55);">// verify access</div>
+              <div><span style="color: #c084fc;">func</span> <span style="color: #5b8cff;">Verify</span>(t *Token)</div>
+              <div>&nbsp;&nbsp;<span style="color: #c084fc;">if</span> t.<span style="color: #5b8cff;">Expired</span>() {</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #c084fc;">return</span> err</div>
+              <div>&nbsp;&nbsp;}</div>
+            </div>
+            <div class="thumb-footer">Built in Go · sub-ms verify</div>
+          </div>
+        </div>
+      </div>
+      <div class="project-meta">
+        <div class="stack"><span>Platform</span><span>Security</span><span>Backend</span></div>
+        <span>2024</span>
+      </div>
+    </article>
+
+    <article class="project reveal">
+      <div class="project-info">
+        <span class="project-tag"><span class="brace">{ }</span> MERIDIAN</span>
+        <h3 class="project-title">HEADLESS<br>STOREFRONT</h3>
+      </div>
+      <div class="project-visual">
+        <div class="thumb">
+          <div class="thumb-header"><span class="brace" style="color: var(--accent);">{ }</span> <b>meridian</b></div>
+          <div class="thumb-body">
+            <div class="thumb-headline">Commerce, <span class="accent">headless.</span></div>
+            <div class="thumb-footer">Next.js · Stripe · Sanity</div>
+          </div>
+        </div>
+        <div class="thumb accent" style="padding: 18px;">
+          <div class="thumb-header" style="padding: 0; margin-bottom: 14px;"><span class="brace" style="color: var(--accent);">{ }</span> <b>shop</b></div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <div style="aspect-ratio: 1; background: rgba(255,255,255,.06); border-radius: 4px; display: grid; place-items: center; font-family: var(--font-mono); font-size: 9px; color: rgba(246,245,241,.4);">PRODUCT</div>
+            <div style="aspect-ratio: 1; background: rgba(91,140,255,.18); border-radius: 4px; display: grid; place-items: center; font-family: var(--font-mono); font-size: 9px; color: var(--accent);">$129</div>
+            <div style="aspect-ratio: 1; background: rgba(255,255,255,.06); border-radius: 4px; display: grid; place-items: center; font-family: var(--font-mono); font-size: 9px; color: rgba(246,245,241,.4);">PRODUCT</div>
+            <div style="aspect-ratio: 1; background: rgba(255,255,255,.06); border-radius: 4px; display: grid; place-items: center; font-family: var(--font-mono); font-size: 9px; color: rgba(246,245,241,.4);">PRODUCT</div>
+          </div>
+        </div>
+        <div class="thumb glow" style="display: grid; place-items: center; text-align: center; padding: 18px;">
+          <div>
+            <div style="font-family: var(--font-display); font-weight: 700; font-size: 36px; letter-spacing: -.03em; line-height: 1; color: #f6f5f1;">+212%</div>
+            <div style="font-family: var(--font-mono); font-size: 10px; color: rgba(246,245,241,.55); letter-spacing: .08em; margin-top: 6px;">CONVERSION LIFT</div>
+          </div>
+        </div>
+      </div>
+      <div class="project-meta">
+        <div class="stack"><span>Digital</span><span>Commerce</span><span>Edge</span></div>
+        <span>2023</span>
+      </div>
+    </article>
+  </section>
+
+  <!-- FOCUS -->
+  <section class="section" id="focus">
+    <div class="section-inner focus-inner">
+      <aside class="focus-rail">
+        <div class="top"></div>
+        <div class="bottom">
+          <span class="rotated">Focus</span>
+          <span class="ix">[00 -3]</span>
+        </div>
+      </aside>
+      <div class="focus-body">
+        <div class="pillar reveal">
+          <div class="icon">
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4">
+              <rect x="3" y="6" width="26" height="20" rx="1"/>
+              <line x1="3" y1="11" x2="29" y2="11"/>
+              <circle cx="7" cy="8.5" r=".7" fill="currentColor"/>
+            </svg>
+          </div>
+          <h3>FRONTEND<br>ENGINEERING</h3>
+          <ul>
+            <li>React &amp; Next.js</li>
+            <li>Design Systems</li>
+            <li>Accessibility</li>
+            <li>Motion &amp; Interaction</li>
+          </ul>
+        </div>
+
+        <div class="pillar reveal" style="--rev-delay: 80ms">
+          <div class="icon">
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4">
+              <rect x="3" y="6" width="26" height="20" rx="1"/>
+              <line x1="9" y1="12" x2="23" y2="20"/>
+              <line x1="23" y1="12" x2="9" y2="20"/>
+            </svg>
+          </div>
+          <h3>FULL-STACK<br>PRODUCT</h3>
+          <ul>
+            <li>API Design</li>
+            <li>Postgres &amp; SQL</li>
+            <li>Auth &amp; Payments</li>
+            <li>End-to-End Ships</li>
+          </ul>
+        </div>
+
+        <div class="pillar reveal" style="--rev-delay: 160ms">
+          <div class="icon">
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4">
+              <rect x="3" y="6" width="26" height="20" rx="1"/>
+              <circle cx="16" cy="16" r="3.2"/>
+              <circle cx="16" cy="16" r=".8" fill="currentColor"/>
+            </svg>
+          </div>
+          <h3>INFRA<br>&amp; DEVOPS</h3>
+          <ul>
+            <li>Docker &amp; CI/CD</li>
+            <li>AWS &amp; Cloudflare</li>
+            <li>Observability</li>
+            <li>Release Tooling</li>
+          </ul>
+        </div>
+
+        <div class="pillar reveal" style="--rev-delay: 240ms">
+          <div class="icon">
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4">
+              <rect x="10" y="4" width="12" height="24" rx="2"/>
+              <line x1="14" y1="7" x2="18" y2="7"/>
+              <circle cx="16" cy="24" r=".8" fill="currentColor"/>
+            </svg>
+          </div>
+          <h3>MOBILE<br>APPS</h3>
+          <ul>
+            <li>React Native</li>
+            <li>Offline-First</li>
+            <li>Native Modules</li>
+            <li>App Store Releases</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIVE CODE DEMO -->
+  <section class="demo" id="demo">
+    <div class="demo-inner">
+      <aside class="rail">
+        <span class="rail-label">[04] / Demo</span>
+        <span class="rail-label">— Live</span>
+      </aside>
+      <div class="demo-body">
+        <div class="demo-lead reveal">
+          <span>Live code</span>
+          <h4>This snippet is being typed in real time.</h4>
+          <p>A small Next.js route handler — the kind of thing I write every day. Refresh to watch it type again.</p>
+        </div>
+        <div class="terminal reveal" style="--rev-delay: 100ms">
+          <div class="terminal-bar">
+            <span class="lights"><i></i><i></i><i></i></span>
+            <span class="path">~/portfolio/app/api/projects/route.ts</span>
+            <span>TS</span>
+          </div>
+          <div class="terminal-body" id="terminalBody"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="contact-inner">
+      <div class="contact-big">
+        <h2><span>SOCIAL</span> <span class="dim">SOCIAL</span></h2>
+      </div>
+      <div class="contact-grid">
+        <p class="contact-lead reveal">
+          <small>And that's all, folks</small>
+          <span class="em">If you want to build something together</span> — or just say hi — drop me a line. I read everything.
+        </p>
+        <div class="portrait reveal" style="--rev-delay: 80ms">
+          <div class="stripes"></div>
+        </div>
+      </div>
+      <div class="contact-actions">
+        <a href="mailto:hello@example.com" class="magnetic" data-cursor="hover" data-magnetic>Email <span class="arrow">↗</span></a>
+        <a href="#" class="magnetic ghost" data-cursor="hover" data-magnetic>GitHub <span class="arrow">↗</span></a>
+        <a href="#" class="magnetic ghost" data-cursor="hover" data-magnetic>LinkedIn <span class="arrow">↗</span></a>
+        <a href="#" class="magnetic ghost" data-cursor="hover" data-magnetic>X / Twitter <span class="arrow">↗</span></a>
+      </div>
+      <div class="footer-meta">
+        <span>JACQUES PIETERSE © 2026</span>
+        <span>Site built by me — with care.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- React for the Tweaks panel only -->
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script type="text/babel" src="tweaks-panel.jsx"></script>
+  <script type="text/babel" src="app.jsx"></script>
+
+  <script src="interactions.js"></script>
+</body>
+</html>

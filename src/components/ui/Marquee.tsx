@@ -17,7 +17,7 @@ export function Marquee({ items }: { items: string[] }) {
         style={{
           display: 'flex',
           gap: '0',
-          animation: 'marquee 30s linear infinite',
+          animation: 'marquee 60s linear infinite',
           width: 'max-content',
         }}
       >

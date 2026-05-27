@@ -1,61 +1,71 @@
 import { projects } from '@/src/lib/data'
 import { ProjectCard } from '@/src/components/ui/ProjectCard'
 
+const stackItems = [
+  { label: 'TypeScript', dot: true },
+  { label: 'React', dot: false },
+  { label: 'Next.js', dot: true },
+  { label: 'Node.js', dot: false },
+  { label: '.NET', dot: true },
+  { label: 'Azure', dot: false },
+  { label: 'Docker', dot: true },
+  { label: 'Supabase', dot: false },
+  { label: 'Swift', dot: true },
+  { label: 'MAUI', dot: false },
+  { label: 'PostgreSQL', dot: true },
+  { label: 'OpenAI', dot: false },
+]
+
 export function ProjectsSection() {
   return (
-    <section
-      id="projects"
-      style={{
-        backgroundColor: 'var(--color-base)',
-        borderTop: '1px solid var(--color-border)',
-      }}
-    >
-      <div
-        style={{
-          maxWidth: '1280px',
-          margin: '0 auto',
-          padding: '96px 24px',
-        }}
-      >
-        {/* Section header */}
-        <div style={{ marginBottom: '8px' }}>
-          <div
-            style={{
-              fontFamily: 'var(--font-space-mono), monospace',
-              fontSize: '10px',
-              letterSpacing: '0.18em',
-              textTransform: 'uppercase',
-              color: 'var(--color-dim)',
-              marginBottom: '16px',
-            }}
-          >
-            03 — Selected Work
+    <>
+      {/* ── Stack marquee + WORK header ─────────────────────── */}
+      <section className="work-section-wrap" id="projects">
+        <div className="work-inner">
+          {/* Dark tech marquee strip */}
+          <div className="stack-marquee" aria-hidden="true">
+            <div className="stack-marquee-track">
+              {stackItems.map((item, i) => (
+                <span
+                  key={i}
+                  className={`stack-marquee-item${item.dot ? '' : ' muted'}`}
+                >
+                  {item.label}
+                  {item.dot && <span className="dot" />}
+                </span>
+              ))}
+            </div>
+            {/* Duplicate for seamless loop */}
+            <div className="stack-marquee-track" aria-hidden="true">
+              {stackItems.map((item, i) => (
+                <span
+                  key={i}
+                  className={`stack-marquee-item${item.dot ? '' : ' muted'}`}
+                >
+                  {item.label}
+                  {item.dot && <span className="dot" />}
+                </span>
+              ))}
+            </div>
           </div>
-          <h2
-            style={{
-              fontFamily: 'var(--font-syne), sans-serif',
-              fontWeight: 800,
-              fontSize: 'clamp(48px, 7vw, 96px)',
-              letterSpacing: '-0.04em',
-              lineHeight: 0.88,
-              color: 'var(--color-text)',
-              margin: 0,
-              marginLeft: '-4px', // optical alignment - bleeds slightly left
-            }}
-          >
-            FEATURED
-            <br />
-            <span style={{ color: 'var(--color-accent)' }}>*</span> WORK
-          </h2>
-        </div>
 
-        {/* Project cards */}
-        <div>
-          {projects.map((project, index) => (
-            <ProjectCard key={project.id} project={project} index={index} />
-          ))}
+          {/* Big overflowing WORK heading */}
+          <div className="work-header">
+            <h2>
+              <span>WORK</span>{' '}
+              <span style={{ color: 'var(--fg-3)' }}>WORK</span>
+            </h2>
+            <span className="work-star">*</span>
+          </div>
         </div>
+      </section>
+
+      {/* ── Project cards — alternating image position ───────── */}
+      <div className="projects-list">
+        {projects.map((project, index) => (
+          <ProjectCard key={project.id} project={project} index={index} />
+        ))}
       </div>
-    </section>
+    </>
   )
 }

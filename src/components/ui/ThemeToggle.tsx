@@ -1,63 +1,63 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { Sun, Moon } from 'lucide-react'
 
 export function ThemeToggle() {
-  // Start dark — matches server render exactly. After hydration,
-  // useEffect reads localStorage and updates via a ref-driven re-render.
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark')
-  // Ref lets us read the resolved theme in the toggle handler immediately,
-  // without calling setState inside the effect (which the linter forbids).
-  const resolvedRef = useRef<'dark' | 'light'>('dark')
+  // Default to light — matches the design's default
+  const [theme, setTheme] = useState<'light' | 'dark'>('light')
+  const resolvedRef = useRef<'light' | 'dark'>('light')
 
   useEffect(() => {
-    const stored = localStorage.getItem('theme') as 'dark' | 'light' | null
-    resolvedRef.current = stored ?? 'dark'
+    const stored = localStorage.getItem('jp.theme') as 'light' | 'dark' | null
+    resolvedRef.current = stored ?? 'light'
     document.documentElement.setAttribute('data-theme', resolvedRef.current)
-    // Schedule the state sync as a microtask so it runs after hydration
-    // completes — this avoids the cascading-render lint rule.
     Promise.resolve().then(() => setTheme(resolvedRef.current))
   }, [])
 
   const toggle = () => {
-    const next = theme === 'dark' ? 'light' : 'dark'
+    const next = theme === 'light' ? 'dark' : 'light'
     resolvedRef.current = next
     setTheme(next)
-    localStorage.setItem('theme', next)
+    localStorage.setItem('jp.theme', next)
     document.documentElement.setAttribute('data-theme', next)
   }
 
   return (
-    // suppressHydrationWarning: server renders 'dark'/Sun, client may read
-    // a different stored theme. React's official escape hatch for this pattern.
     <button
       suppressHydrationWarning
       onClick={toggle}
-      data-cursor="link"
-      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+      data-cursor="hover"
+      aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
       style={{
-        background: 'none',
-        border: '1px solid var(--color-border)',
-        borderRadius: '100px',
-        padding: '7px 10px',
-        color: 'var(--color-muted)',
-        cursor: 'pointer',
-        display: 'flex',
+        display: 'inline-flex',
         alignItems: 'center',
-        justifyContent: 'center',
-        transition: 'color 0.2s ease, border-color 0.2s ease',
+        gap: '8px',
+        padding: '8px 14px',
+        border: '1px solid var(--line)',
+        borderRadius: '999px',
+        background: 'color-mix(in oklab, var(--bg) 80%, transparent)',
+        backdropFilter: 'blur(8px)',
+        WebkitBackdropFilter: 'blur(8px)',
+        fontFamily: 'var(--font-mono), ui-monospace, "SF Mono", Menlo, Consolas, monospace',
+        fontSize: '12px',
+        letterSpacing: '.02em',
+        textTransform: 'uppercase',
+        color: 'var(--fg)',
+        cursor: 'none',
+        transition: 'background .2s ease, color .2s ease, border-color .2s ease',
       }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.color = 'var(--color-accent)'
-        e.currentTarget.style.borderColor = 'var(--color-accent)'
+      onMouseEnter={e => {
+        e.currentTarget.style.background = 'var(--fg)'
+        e.currentTarget.style.color = 'var(--bg)'
+        e.currentTarget.style.borderColor = 'var(--fg)'
       }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.color = 'var(--color-muted)'
-        e.currentTarget.style.borderColor = 'var(--color-border)'
+      onMouseLeave={e => {
+        e.currentTarget.style.background = 'color-mix(in oklab, var(--bg) 80%, transparent)'
+        e.currentTarget.style.color = 'var(--fg)'
+        e.currentTarget.style.borderColor = 'var(--line)'
       }}
     >
-      {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
+      {theme === 'light' ? '◐' : '○'}
     </button>
   )
 }

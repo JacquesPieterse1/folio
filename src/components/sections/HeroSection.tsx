@@ -1,235 +1,121 @@
-import { cn } from '@/src/lib/utils'
-
 export function HeroSection() {
   return (
-    <section
-      id="hero"
-      className={cn('grain')}
-      style={{
-        minHeight: '100vh',
-        backgroundColor: 'var(--color-base)',
-        display: 'flex',
-        alignItems: 'stretch',
-      }}
-    >
-      <div
-        style={{
-          maxWidth: '1280px',
-          width: '100%',
-          margin: '0 auto',
-          padding: '120px 24px 64px',
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '48px',
-          alignItems: 'center',
-          position: 'relative',
-          zIndex: 1,
-        }}
-        className="hero-inner"
-      >
-        {/* LEFT COLUMN */}
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            gap: '32px',
-          }}
-        >
-          {/* Top label */}
-          <div
-            style={{
-              fontFamily: 'var(--font-space-mono), monospace',
-              fontSize: '10px',
-              letterSpacing: '0.18em',
-              textTransform: 'uppercase',
-              color: 'var(--color-dim)',
-            }}
+    <section className="hero-section" id="home">
+      <div className="hero-inner">
+        {/* ── Rail ── */}
+        <aside className="jp-rail" aria-hidden="true">
+          <span className="jp-rail-label">[00] / Home</span>
+          <span className="jp-rail-label">2026 ©</span>
+        </aside>
+
+        {/* ── Stage ── */}
+        <div className="hero-stage">
+          {/* Scrolling title marquee */}
+          <h1
+            className="hero-title"
+            aria-label="Jacques Pieterse — Full-Stack Developer"
           >
-            Full Stack Developer — 01
-          </div>
+            <span className="hero-title-track" aria-hidden="true">
+              <MarqueeGroup />
+              <MarqueeGroup />
+            </span>
+          </h1>
 
-          {/* Giant name */}
-          <div style={{ flex: 1 }}>
-            <h1
-              style={{
-                fontFamily: 'var(--font-syne), sans-serif',
-                fontWeight: 800,
-                fontSize: 'clamp(56px, 8vw, 104px)',
-                letterSpacing: '-0.04em',
-                lineHeight: 0.88,
-                color: 'var(--color-text)',
-                margin: 0,
-              }}
-            >
-              JACQUES
-              <br />
-              <span style={{ color: 'var(--color-accent)' }}>*</span>{' '}
-              PIETERSE
-            </h1>
-
-            {/* Accent divider */}
-            <div
-              style={{
-                width: '32px',
-                height: '1px',
-                backgroundColor: 'var(--color-accent)',
-                margin: '24px 0',
-              }}
-            />
-
-            {/* Subtitle */}
-            <p
-              style={{
-                fontFamily: 'var(--font-space-mono), monospace',
-                fontSize: '13px',
-                lineHeight: 1.8,
-                color: 'var(--color-muted)',
-                maxWidth: '400px',
-                margin: 0,
-              }}
-            >
-              Building scalable apps, AI systems, and modern digital
-              experiences — from Cape Town to the world.
+          {/* Intro + Visual grid */}
+          <div className="hero-grid">
+            <p className="hero-intro reveal">
+              HEY — YOU MADE IT. I&apos;M{' '}
+              <span style={{ color: 'var(--accent)' }}>JACQUES, A FULL-STACK DEV</span>{' '}
+              SHIPPING REAL PRODUCTS FROM CAPE TOWN. SCROLL&nbsp;↓ FOR THE GOODS.
             </p>
+            <HeroVisual />
           </div>
 
-          {/* CTA row */}
-          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-            <a
-              href="#projects"
-              data-cursor="link"
-              style={{
-                fontFamily: 'var(--font-space-mono), monospace',
-                fontSize: '11px',
-                letterSpacing: '0.12em',
-                textTransform: 'uppercase',
-                color: 'var(--color-accent)',
-                textDecoration: 'none',
-                border: '1px solid var(--color-accent)',
-                borderRadius: '100px',
-                padding: '10px 24px',
-                transition: 'background 0.2s ease, color 0.2s ease',
-              }}
-            >
-              View Work →
-            </a>
-            <a
-              href="#contact"
-              data-cursor="link"
-              style={{
-                fontFamily: 'var(--font-space-mono), monospace',
-                fontSize: '11px',
-                letterSpacing: '0.12em',
-                textTransform: 'uppercase',
-                color: 'var(--color-muted)',
-                textDecoration: 'none',
-                border: '1px solid var(--color-border)',
-                borderRadius: '100px',
-                padding: '10px 24px',
-              }}
-            >
-              Contact
-            </a>
+          {/* Meta footer */}
+          <div className="hero-meta">
+            <span>FULL-STACK · WEB · MOBILE · PLATFORM</span>
+            <span className="hero-scroll-cue">
+              <span className="hero-pulse-dot" />
+              SCROLL TO EXPLORE
+            </span>
+            <span>[00 / 05]</span>
           </div>
-
-          {/* Bottom meta */}
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              fontFamily: 'var(--font-space-mono), monospace',
-              fontSize: '10px',
-              letterSpacing: '0.15em',
-              textTransform: 'uppercase',
-              color: 'var(--color-dim)',
-              borderTop: '1px solid var(--color-border)',
-              paddingTop: '20px',
-            }}
-          >
-            <span>Cape Town, ZA</span>
-            <span>↓ Scroll</span>
-          </div>
-        </div>
-
-        {/* RIGHT COLUMN — project preview grid */}
-        <div
-          className="hero-project-grid"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gridTemplateRows: 'auto auto auto',
-            gap: '8px',
-          }}
-        >
-          {/* Tall box - spans 3 rows */}
-          <PreviewBox label="01 / AI ANALYTICS" tall />
-          {/* Right column - 3 stacked boxes */}
-          <PreviewBox label="02 / SAAS PORTAL" />
-          <PreviewBox label="03 / REAL ESTATE" />
-          {/* Bottom row */}
-          <PreviewBox label="04 / FITNESS APP" />
-          <PreviewBox label="05 / CYBERSECURITY" />
         </div>
       </div>
-
-      {/* Mobile responsive styles */}
-      <style>{`
-        @media (max-width: 768px) {
-          .hero-inner {
-            grid-template-columns: 1fr !important;
-            padding-top: 100px !important;
-            padding-bottom: 48px !important;
-          }
-          .hero-project-grid {
-            display: none !important;
-          }
-        }
-      `}</style>
     </section>
   )
 }
 
-function PreviewBox({ label, tall = false }: { label: string; tall?: boolean }) {
+function MarqueeGroup() {
+  return (
+    <span className="hero-title-group" aria-hidden="true">
+      <span>JACQUES</span>
+      <span style={{
+        color: 'var(--accent)',
+        fontFamily: 'var(--font-mono)',
+        fontWeight: 400,
+        fontSize: '.85em',
+        transform: 'translateY(-.05em)',
+        display: 'inline-block',
+      }}>*</span>
+      <span style={{ color: 'var(--fg-3)' }}>PIETERSE</span>
+      <span style={{
+        color: 'var(--accent)',
+        fontFamily: 'var(--font-mono)',
+        fontWeight: 400,
+        padding: '0 .04em',
+      }}>{'{ }'}</span>
+      <span>FULL-STACK</span>
+      <span style={{
+        color: 'var(--accent)',
+        fontFamily: 'var(--font-mono)',
+        fontWeight: 400,
+        fontSize: '.85em',
+        transform: 'translateY(-.05em)',
+        display: 'inline-block',
+      }}>*</span>
+      <span style={{ color: 'var(--fg-3)' }}>DEVELOPER</span>
+      <span style={{
+        color: 'var(--accent)',
+        fontFamily: 'var(--font-mono)',
+        fontWeight: 400,
+        padding: '0 .04em',
+      }}>{'{ }'}</span>
+    </span>
+  )
+}
+
+function HeroVisual() {
   return (
     <div
-      style={{
-        gridRow: tall ? 'span 3' : 'span 1',
-        backgroundColor: 'var(--color-surface)',
-        border: '1px solid var(--color-border)',
-        borderRadius: '6px',
-        minHeight: tall ? '320px' : '100px',
-        position: 'relative',
-        overflow: 'hidden',
-        display: 'flex',
-        alignItems: 'flex-end',
-        padding: '12px',
-      }}
+      className="hero-visual reveal"
+      style={{ ['--rev-delay' as string]: '120ms' }}
     >
-      {/* Accent color overlay */}
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundColor: 'var(--color-accent)',
-          opacity: 0.03,
-          pointerEvents: 'none',
-        }}
-      />
-      <span
-        style={{
-          fontFamily: 'var(--font-space-mono), monospace',
-          fontSize: '9px',
-          letterSpacing: '0.12em',
-          textTransform: 'uppercase',
-          color: 'var(--color-muted)',
-          position: 'relative',
-          zIndex: 1,
-        }}
-      >
-        {label}
-      </span>
+      <div className="hero-cell" style={{ gridColumn: '1 / span 2', gridRow: '1 / span 2' }}>
+        <span>$ ./run --portfolio</span>
+        <span className="hero-cell-big">JP*</span>
+      </div>
+      <div className="hero-cell dark" style={{ gridColumn: '3 / span 2', gridRow: '1 / span 2' }}>
+        <span>// stack</span>
+        <span className="hero-cell-big">TS · GO</span>
+      </div>
+      <div className="hero-cell" style={{ gridColumn: '5 / span 2', gridRow: '1 / span 3' }}>
+        <div className="hero-cell-stripes" />
+        <span style={{ position: 'relative' }}>/* product shot */</span>
+      </div>
+      <div className="hero-cell accent-cell" style={{ gridColumn: '1 / span 3', gridRow: '3 / span 2' }}>
+        <span>02+ YEARS</span>
+        <span className="hero-cell-big">SHIPPING</span>
+      </div>
+      <div className="hero-cell" style={{ gridColumn: '4 / span 2', gridRow: '3 / span 1' }}>
+        <span>CPT · ZA</span>
+      </div>
+      <div className="hero-cell dark" style={{ gridColumn: '4 / span 1', gridRow: '4 / span 1' }}>
+        <span>{'{ }'}</span>
+      </div>
+      <div className="hero-cell" style={{ gridColumn: '5 / span 2', gridRow: '4 / span 1' }}>
+        <span>↘ scroll</span>
+      </div>
     </div>
   )
 }

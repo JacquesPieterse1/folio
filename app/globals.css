@@ -16,9 +16,11 @@
   --accent:#5b8cff;
 
   /* Layout */
-  --gutter: clamp(16px, 2.4vw, 36px);
-  --rail:   clamp(40px, 4.5vw, 72px);
-  --maxw:   1480px;
+  --gutter:   clamp(16px, 2.4vw, 36px);
+  --side-pad: clamp(24px, 5vw, 80px);
+  --rail:     clamp(40px, 4.5vw, 72px);
+  --maxw:     1480px;
+  --nav-h:    78px;
 }
 
 [data-theme="dark"] {
@@ -112,7 +114,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 ───────────────────────────────────────────── */
 .jp-section {
   position: relative;
-  padding: var(--gutter);
+  padding: var(--gutter) var(--side-pad);
 }
 .jp-section-inner {
   border: 1px solid var(--line);
@@ -160,12 +162,12 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 ───────────────────────────────────────────── */
 .hero-section {
   padding-top: 78px;
-  padding-left: var(--gutter);
-  padding-right: var(--gutter);
-  padding-bottom: var(--gutter);
+  padding-left: var(--side-pad);
+  padding-right: var(--side-pad);
+  padding-bottom: 78px;
 }
 .hero-inner {
-  min-height: calc(100vh - 78px - var(--gutter));
+  min-height: calc(100vh - var(--nav-h) - var(--gutter));
   border: 1px solid var(--line);
   background: var(--card);
   border-radius: 4px;
@@ -378,7 +380,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
    Work Section
 ───────────────────────────────────────────── */
 .work-section-wrap {
-  padding: var(--gutter);
+  padding: var(--gutter) var(--side-pad);
   padding-bottom: 0;
 }
 .work-inner {
@@ -463,7 +465,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   padding: 0 var(--gutter) var(--gutter);
   display: flex;
   flex-direction: column;
-  gap: var(--gutter);
+  gap: clamp(32px, 5vw, 72px);
 }
 .project-card {
   border: 1px solid var(--line);
@@ -694,7 +696,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
    Live Code Demo
 ───────────────────────────────────────────── */
 .demo-wrap {
-  padding: 0 var(--gutter) var(--gutter);
+  padding:0 var(--side-pad) var(--gutter);
 }
 .demo-inner {
   border: 1px solid var(--line);
@@ -788,7 +790,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
    Contact / Footer
 ───────────────────────────────────────────── */
 .contact-wrap {
-  padding: 0 var(--gutter) var(--gutter);
+  padding: 0 var(--side-pad) var(--gutter);
 }
 .contact-inner {
   border: 1px solid var(--line);
@@ -926,7 +928,12 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
    Alternating Project Cards
 ───────────────────────────────────────────── */
 .proj-alt-info {
-  /* border direction is set via inline style per card */
+  /* border direction toggled via inline style per card */
+  min-width: 0; /* prevent flex blowout */
+}
+.proj-alt-img {
+  overflow: hidden; /* always clip the fill image to its box */
+  min-width: 0;
 }
 
 /* ─────────────────────────────────────────────
@@ -954,14 +961,22 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
     flex-direction: column !important;
     min-height: 0 !important;
   }
+  /* Image always on top, explicit height so Next.js fill has something to stretch into */
+  .proj-alt-img {
+    order: -1 !important;
+    flex: none !important;
+    width: 100% !important;
+    height: 280px !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+  /* Content below image, border on top to separate from image */
   .proj-alt-info {
+    order: 0 !important;
     width: 100% !important;
     border-right: 0 !important;
     border-left: 0 !important;
-    border-bottom: 1px solid var(--line) !important;
-  }
-  .proj-alt-img {
-    min-height: 260px;
+    border-top: 1px solid var(--line) !important;
   }
 
   .focus-body { grid-template-columns: 1fr 1fr; padding: 32px; gap: 32px; }

@@ -32,6 +32,7 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
         style={{
           width: '36%',
           flexShrink: 0,
+          minWidth: 0,
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
@@ -180,7 +181,7 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
           flex: 1,
           position: 'relative',
           background: '#0a0a0a',
-          overflow: 'hidden',
+          /* overflow: hidden lives in the CSS class */
         }}
       >
         <Image

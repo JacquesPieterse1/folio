@@ -57,15 +57,15 @@ export function ProjectsSection() {
             </h2>
             <span className="work-star">*</span>
           </div>
+          {/* ── Project cards — alternating image position ───────── */}
+          <div className="projects-list">
+            {projects.map((project, index) => (
+              <ProjectCard key={project.id} project={project} index={index} />
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ── Project cards — alternating image position ───────── */}
-      <div className="projects-list">
-        {projects.map((project, index) => (
-          <ProjectCard key={project.id} project={project} index={index} />
-        ))}
-      </div>
     </>
   )
 }

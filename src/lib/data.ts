@@ -30,7 +30,7 @@ export const projects: Project[] = [
     year: 2024,
     description: 'Real-time analytics platform powered by OpenAI, delivering intelligent insights and automated reporting for enterprise teams.',
     stack: ['Next.js', 'Python', 'OpenAI', 'Supabase', 'TypeScript'],
-    image: 'https://placehold.co/800x600/111111/222222',
+    image: '/public/images/Gemini_Generated_Image_pp0lvxpp0lvxpp0l.png',
     github: 'https://github.com/JacquesPieterse1',
     live: '#',
     featured: true,

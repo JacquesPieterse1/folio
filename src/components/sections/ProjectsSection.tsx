@@ -16,6 +16,17 @@ const stackItems = [
   { label: 'OpenAI', dot: false },
 ]
 
+function WorkMarqueeGroup() {
+  return (
+    <span className="section-marquee-group">
+      <span>WORK</span>
+      <span className="section-marquee-sep">*</span>
+      <span style={{ color: 'var(--fg-3)' }}>WORK</span>
+      <span className="section-marquee-sep">*</span>
+    </span>
+  )
+}
+
 export function ProjectsSection() {
   return (
     <>
@@ -51,10 +62,18 @@ export function ProjectsSection() {
 
           {/* Big overflowing WORK heading */}
           <div className="work-header">
-            <h2>
+            {/* Desktop: static big heading */}
+            <h2 className="work-title-static">
               <span>WORK</span>{' '}
               <span style={{ color: 'var(--fg-3)' }}>WORK</span>
             </h2>
+            {/* Mobile: scrolling marquee */}
+            <div className="work-title-marquee" aria-hidden="true">
+              <span className="section-marquee-track">
+                <WorkMarqueeGroup />
+                <WorkMarqueeGroup />
+              </span>
+            </div>
             <span className="work-star">*</span>
           </div>
           {/* ── Project cards — alternating image position ───────── */}

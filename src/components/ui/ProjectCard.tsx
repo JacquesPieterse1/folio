@@ -24,8 +24,16 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
         background: 'var(--card)',
         borderRadius: '6px',
         overflow: 'hidden',
+        position: 'relative',
       }}
     >
+      {/* Invisible full-card link overlay */}
+      <a
+        href={`/${project.id}`}
+        className="proj-card-overlay-link"
+        aria-label={`View ${project.title} project`}
+        data-cursor="hover"
+      />
       {/* ── Content side (always 36% wide) ─────────────────── */}
       <div
         className="proj-alt-info"
@@ -80,99 +88,16 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
           >
             {project.title}
           </h3>
-
-          {/* Description */}
-          <p
-            style={{
-              fontFamily: 'var(--font-display), ui-sans-serif, system-ui, sans-serif',
-              fontSize: '14px',
-              lineHeight: 1.6,
-              color: 'var(--fg-2)',
-              margin: 0,
-            }}
-          >
-            {project.description}
-          </p>
         </div>
 
-        {/* ── Bottom: stack + links ── */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          {/* Stack — slash-separated */}
-          <div
-            style={{
-              display: 'flex',
-              gap: '0',
-              flexWrap: 'wrap',
-              fontFamily: 'var(--font-mono), ui-monospace, monospace',
-              fontSize: '11px',
-              letterSpacing: '0.14em',
-              textTransform: 'uppercase',
-              color: 'var(--fg-2)',
-            }}
-          >
-            {project.stack.map((tech, i) => (
-              <span key={tech}>
-                {i > 0 && (
-                  <span style={{ color: 'var(--line)', padding: '0 8px' }}>/</span>
-                )}
-                {tech}
-              </span>
-            ))}
-          </div>
-
-          {/* Links */}
-          <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-            {project.github && (
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`${project.title} on GitHub`}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  fontFamily: 'var(--font-mono), ui-monospace, monospace',
-                  fontSize: '11px',
-                  letterSpacing: '0.14em',
-                  textTransform: 'uppercase',
-                  color: 'var(--fg-2)',
-                  textDecoration: 'none',
-                  transition: 'color 0.2s ease',
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--fg)' }}
-                onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--fg-2)' }}
-              >
-                GitHub <ArrowUpRight size={11} />
-              </a>
-            )}
-            {project.live && project.live !== '#' && (
-              <a
-                href={project.live}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`${project.title} live`}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  fontFamily: 'var(--font-mono), ui-monospace, monospace',
-                  fontSize: '11px',
-                  letterSpacing: '0.14em',
-                  textTransform: 'uppercase',
-                  color: 'var(--fg-2)',
-                  textDecoration: 'none',
-                  transition: 'color 0.2s ease',
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--fg)' }}
-                onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--fg-2)' }}
-              >
-                Live <ArrowUpRight size={11} />
-              </a>
-            )}
-          </div>
+        {/* View project link */}
+        <div className="proj-card-view-link">
+          <span>View project</span>
+          <ArrowUpRight size={14} />
         </div>
-      </div>
+
+        </div>
+
 
       {/* ── Image side (fills remaining width) ─────────────── */}
       <div
@@ -192,25 +117,7 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
           style={{ objectFit: 'cover' }}
         />
 
-        {/* Year badge */}
-        <div
-          style={{
-            position: 'absolute',
-            top: '16px',
-            right: '16px',
-            fontFamily: 'var(--font-mono), ui-monospace, monospace',
-            fontSize: '10px',
-            letterSpacing: '0.12em',
-            color: 'rgba(246,245,241,0.7)',
-            background: 'rgba(0,0,0,0.4)',
-            backdropFilter: 'blur(4px)',
-            padding: '4px 10px',
-            borderRadius: '100px',
-            border: '1px solid rgba(255,255,255,0.1)',
-          }}
-        >
-          {project.year}
-        </div>
+        
 
         {/* Index number */}
         <div

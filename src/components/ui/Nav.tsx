@@ -1,8 +1,13 @@
 'use client'
 
+import { usePathname } from 'next/navigation'
 import { ThemeToggle } from '@/src/components/ui/ThemeToggle'
 
 export function Nav() {
+  const pathname = usePathname()
+  // Project detail pages have their own header
+  if (pathname !== '/') return null
+
   const handleNav = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault()
     const el = document.getElementById(id)
@@ -10,6 +15,7 @@ export function Nav() {
       const y = el.getBoundingClientRect().top + window.scrollY - 8
       window.scrollTo({ top: y, behavior: 'smooth' })
     }
+    window.history.replaceState(null, '', '/')
   }
 
   return (
@@ -36,6 +42,7 @@ export function Nav() {
         href="#home"
         onClick={(e) => handleNav(e, 'home')}
         data-cursor="hover"
+        className="nav-brand"
         style={{
           display: 'inline-flex',
           alignItems: 'center',
@@ -50,6 +57,7 @@ export function Nav() {
           textTransform: 'uppercase',
           color: 'var(--fg)',
           pointerEvents: 'auto',
+          whiteSpace: 'nowrap',
           transition: 'background .2s ease, border-color .2s ease',
         }}
         onMouseEnter={e => {
@@ -70,7 +78,7 @@ export function Nav() {
 
       {/* Nav links + theme toggle */}
       <div style={{ display: 'flex', gap: '6px', pointerEvents: 'auto' }}>
-        <NavPill href="#work" label="Work" arrow="↓" />
+        <NavPill href="#projects" label="Work" arrow="↓" />
         <NavPill href="#contact" label="About" arrow="→" />
         <ThemeToggle />
       </div>
@@ -87,6 +95,7 @@ function NavPill({ href, label, arrow }: { href: string; label: string; arrow: s
       const y = el.getBoundingClientRect().top + window.scrollY - 8
       window.scrollTo({ top: y, behavior: 'smooth' })
     }
+    window.history.replaceState(null, '', '/')
   }
 
   return (

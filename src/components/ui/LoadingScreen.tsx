@@ -6,9 +6,12 @@ import { AnimatePresence, m } from 'framer-motion'
 const LETTERS = 'JACQUES PIETERSE'.split('')
 
 export function LoadingScreen() {
-  const [isVisible, setIsVisible] = useState(true)
+  const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
+    if (sessionStorage.getItem('jp.loadingShown')) return
+    sessionStorage.setItem('jp.loadingShown', '1')
+    setIsVisible(true)
     const timer = setTimeout(() => setIsVisible(false), 2000)
     return () => clearTimeout(timer)
   }, [])
@@ -19,7 +22,8 @@ export function LoadingScreen() {
         <m.div
           initial={{ y: 0 }}
           exit={{ y: '-100%' }}
-          transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1], delay: 0.2 }}
+          transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1], delay: 0.7
+           }}
           style={{
             position: 'fixed',
             inset: 0,

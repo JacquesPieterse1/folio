@@ -26,7 +26,7 @@ export function AboutSection() {
           >
             Hi, I&apos;m <strong>Jacques, a Full-Stack Developer</strong> based in Cape Town with 2+ years building
             production software — from internal tooling and platform services at{' '}
-            <span style={{ color: 'var(--accent)', fontWeight: 500 }}>4Sight Holdings</span> to mobile apps
+            <span style={{ color: 'var(--accent)', fontWeight: 500 }}>4Sight Holdings </span> to mobile apps
             and web frontends. I care about clean systems, tight interfaces, and code that ships on time
             and doesn&apos;t fall over.
           </p>

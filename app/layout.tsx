@@ -6,6 +6,7 @@ import { CustomCursor } from '@/src/components/ui/CustomCursor'
 import { Nav } from '@/src/components/ui/Nav'
 import { RevealObserver } from '@/src/components/ui/RevealObserver'
 import { LoadingScreen } from '@/src/components/ui/LoadingScreen'
+import { ScrollToTop } from '@/src/components/ui/ScrollToTop'
 
 const geist = Geist({
   subsets: ['latin'],
@@ -44,6 +45,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
+      data-scroll-behavior="smooth"
       className={`${geist.variable} ${geistMono.variable}`}
     >
       <body className="antialiased">
@@ -54,6 +56,7 @@ export default function RootLayout({
           }}
         />
         <Providers>
+          <ScrollToTop />
           <LoadingScreen />
           <CustomCursor />
           <RevealObserver />

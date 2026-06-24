@@ -1,3 +1,5 @@
+import { HeroVisual } from '@/src/components/ui/HeroVisual'
+
 export function HeroSection() {
   return (
     <section className="hero-section" id="home">
@@ -82,40 +84,5 @@ function MarqueeGroup() {
         padding: '0 .04em',
       }}>{'{ }'}</span>
     </span>
-  )
-}
-
-function HeroVisual() {
-  return (
-    <div
-      className="hero-visual reveal"
-      style={{ ['--rev-delay' as string]: '120ms' }}
-    >
-      <div className="hero-cell" style={{ gridColumn: '1 / span 2', gridRow: '1 / span 2' }}>
-        <span>$ ./run --portfolio</span>
-        <span className="hero-cell-big">JP*</span>
-      </div>
-      <div className="hero-cell dark" style={{ gridColumn: '3 / span 2', gridRow: '1 / span 2' }}>
-        <span>// stack</span>
-        <span className="hero-cell-big">TS · GO</span>
-      </div>
-      <div className="hero-cell" style={{ gridColumn: '5 / span 2', gridRow: '1 / span 3' }}>
-        <div className="hero-cell-stripes" />
-        <span style={{ position: 'relative' }}>/* product shot */</span>
-      </div>
-      <div className="hero-cell accent-cell" style={{ gridColumn: '1 / span 3', gridRow: '3 / span 2' }}>
-        <span>02+ YEARS</span>
-        <span className="hero-cell-big">SHIPPING</span>
-      </div>
-      <div className="hero-cell" style={{ gridColumn: '4 / span 2', gridRow: '3 / span 1' }}>
-        <span>CPT · ZA</span>
-      </div>
-      <div className="hero-cell dark" style={{ gridColumn: '4 / span 1', gridRow: '4 / span 1' }}>
-        <span>{'{ }'}</span>
-      </div>
-      <div className="hero-cell" style={{ gridColumn: '5 / span 2', gridRow: '4 / span 1' }}>
-        <span>↘ scroll</span>
-      </div>
-    </div>
   )
 }

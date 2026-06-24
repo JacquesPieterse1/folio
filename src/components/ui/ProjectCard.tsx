@@ -93,7 +93,7 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
 
         {/* View project link */}
         <div className="proj-card-view-link">
-          <span>View project</span>
+          <span>View projects</span>
           <ArrowUpRight size={14} />
         </div>
 

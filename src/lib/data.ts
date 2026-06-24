@@ -43,20 +43,20 @@ export const projects: Project[] = [
     featured: true,
     sections: [
       {
-        heading: 'Product Experience',
+        heading: 'Gia Nutrition',
         body: 'A product page should answer every question a customer has before they ask it. High-fidelity imagery, size guidance, real stock levels, and honest reviews — all above the fold. The add-to-cart moment is the most important click on the site, so it gets the most care.',
-        image: '/images/MacBook-Pro-14-inch-free-mockup-kit-1000x750.webp',
+        image: '/images/gia.png',
       },
       {
-        heading: 'Checkout Flow',
+        heading: 'Apex Nutrition',
         body: 'One-page checkout that handles guest and returning users, integrates with Apple Pay and Google Pay, and surfaces the right upsells without feeling pushy. Cart abandonment drops when people trust the process — so every step is transparent about cost, delivery, and returns.',
-        image: '/images/MacBook-Pro-14-inch-free-mockup-kit-1000x750.webp',
+        image: '/images/apex.png',
       },
-      {
-        heading: 'Merchant Dashboard',
-        body: 'The back office matters as much as the storefront. Order management, inventory sync, promotional tools, and a revenue dashboard that surfaces what actually drives growth — not just vanity metrics.',
-        image: '/images/MacBook-Pro-14-inch-free-mockup-kit-1000x750.webp',
-      },
+      // {
+      //   heading: 'Merchant Dashboard',
+      //   body: 'The back office matters as much as the storefront. Order management, inventory sync, promotional tools, and a revenue dashboard that surfaces what actually drives growth — not just vanity metrics.',
+      //   image: '/images/MacBook-Pro-14-inch-free-mockup-kit-1000x750.webp',
+      // },
     ],
   },
   {

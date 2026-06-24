@@ -147,6 +147,18 @@ export function ProjectDetailPage({ project }: { project: Project }) {
                 <div className="proj-detail-split-divider" />
                 <h2 className="proj-detail-section-heading">{section.heading}</h2>
                 <p className="proj-detail-section-body">{section.body}</p>
+                {project.live && (
+                  <a
+                    href={project.live}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="proj-site-link"
+                    data-cursor="hover"
+                  >
+                    <span>View Site</span>
+                    <span className="proj-site-link-arrow">↗</span>
+                  </a>
+                )}
               </div>
 
             </div>

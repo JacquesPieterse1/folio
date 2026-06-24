@@ -1,19 +1,20 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useLayoutEffect, useState } from 'react'
 import { AnimatePresence, m } from 'framer-motion'
 
 const LETTERS = 'JACQUES PIETERSE'.split('')
 
 export function LoadingScreen() {
-  const [isVisible, setIsVisible] = useState(true)
+  const [isVisible, setIsVisible] = useState(false)
 
-  useEffect(() => {
-    if (sessionStorage.getItem('jp.loadingShown')) {
-      setIsVisible(false)
-      return
-    }
+  // useLayoutEffect runs before the first browser paint, so setting visible here
+  // means the loading screen is already in the DOM before anything is painted —
+  // no flash of page content on a true first visit.
+  useLayoutEffect(() => {
+    if (sessionStorage.getItem('jp.loadingShown')) return
     sessionStorage.setItem('jp.loadingShown', '1')
+    setIsVisible(true)
     const timer = setTimeout(() => setIsVisible(false), 2000)
     return () => clearTimeout(timer)
   }, [])

@@ -12,6 +12,7 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
 
   return (
     <m.article
+      className="proj-card"
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
@@ -116,6 +117,7 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
           sizes="(max-width: 900px) 100vw, 65vw"
           style={{ objectFit: 'cover' }}
         />
+
 
         
 

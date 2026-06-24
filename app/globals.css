@@ -1165,7 +1165,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   z-index: 1;
   pointer-events: none;
 }
-article:hover .proj-card-view-link {
+.proj-card:hover .proj-card-view-link {
   opacity: 1;
   transform: translateY(0);
 }
@@ -1467,6 +1467,39 @@ article:hover .proj-card-view-link {
   min-width: 0;
 }
 
+/* ── All hover effects — desktop pointer devices only ── */
+@media (hover: hover) {
+  .proj-card {
+    transition:
+      transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+  }
+  .proj-card:hover {
+    transform: translateY(-6px);
+    box-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.04),
+      0 8px 20px rgba(0, 0, 0, 0.08),
+      0 28px 64px rgba(0, 0, 0, 0.14);
+  }
+
+  .proj-alt-img img {
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    transform-origin: center center;
+    will-change: transform;
+  }
+  .proj-card:hover .proj-alt-img img {
+    transform: scale(1.07);
+  }
+
+  .proj-card-view-link svg {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .proj-card:hover .proj-card-view-link svg {
+    transform: translate(2px, -2px);
+  }
+}
+
 /* ─────────────────────────────────────────────
    Responsive — 900px
 ───────────────────────────────────────────── */
@@ -1580,6 +1613,22 @@ article:hover .proj-card-view-link {
   .ask-body { grid-template-columns: 1fr; padding: 28px; gap: 24px; }
   .ask-inner { grid-template-columns: 1fr; }
 
+  /* Contact portrait: circular on mobile */
+  .contact-portrait-col {
+    align-items: center;
+    padding: 28px 0;
+  }
+  .contact-portrait {
+    width: 300px;
+    height: 220px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    flex-shrink: 0;
+  }
+  .contact-portrait-img {
+    object-position: center center !important;
+  }
+
   /* Contact mobile — buttons stacked */
   .contact-footer-tag { display: none; }
   .contact-footer-tag-mob { display: block; }
@@ -1631,7 +1680,8 @@ article:hover .proj-card-view-link {
     padding: 10px 16px;
   }
   .contact-portrait {
-    height: 200px;
+    width: 180px;
+    height: 180px;
   }
 
   /* Project detail: mobile */

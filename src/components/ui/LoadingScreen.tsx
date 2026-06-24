@@ -6,12 +6,14 @@ import { AnimatePresence, m } from 'framer-motion'
 const LETTERS = 'JACQUES PIETERSE'.split('')
 
 export function LoadingScreen() {
-  const [isVisible, setIsVisible] = useState(false)
+  const [isVisible, setIsVisible] = useState(true)
 
   useEffect(() => {
-    if (sessionStorage.getItem('jp.loadingShown')) return
+    if (sessionStorage.getItem('jp.loadingShown')) {
+      setIsVisible(false)
+      return
+    }
     sessionStorage.setItem('jp.loadingShown', '1')
-    setIsVisible(true)
     const timer = setTimeout(() => setIsVisible(false), 2000)
     return () => clearTimeout(timer)
   }, [])

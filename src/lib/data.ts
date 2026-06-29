@@ -34,7 +34,7 @@ export const projects: Project[] = [
     id: 'ecommerce',
     title: 'Ecommerce',
     category: 'Digital Commerce',
-    image: '/images/Group 21.png',
+    image: '/images/ecommerce.png',
     description: 'High-performance online stores with seamless checkout flows and conversion-focused UX.',
     longDescription: 'Ecommerce is where design decisions translate directly to revenue. I build stores that move fast, convert well, and feel premium — from product discovery through to checkout. Every interaction is deliberate: smart search, frictionless cart, transparent shipping, and payment flows that don\'t make people second-guess. The backend is just as considered: inventory management, order routing, and analytics wired up properly from day one.',
     year: '2024',
@@ -42,6 +42,11 @@ export const projects: Project[] = [
     live: '#',
     featured: true,
     sections: [
+      {
+        heading: 'Deadstock Thrift',
+        body: 'The back office matters as much as the storefront. Order management, inventory sync, promotional tools, and a revenue dashboard that surfaces what actually drives growth — not just vanity metrics.',
+        image: '/images/deadstock.png',
+      },
       {
         heading: 'Gia Nutrition',
         body: 'A product page should answer every question a customer has before they ask it. High-fidelity imagery, size guidance, real stock levels, and honest reviews — all above the fold. The add-to-cart moment is the most important click on the site, so it gets the most care.',
@@ -52,11 +57,7 @@ export const projects: Project[] = [
         body: 'One-page checkout that handles guest and returning users, integrates with Apple Pay and Google Pay, and surfaces the right upsells without feeling pushy. Cart abandonment drops when people trust the process — so every step is transparent about cost, delivery, and returns.',
         image: '/images/apex.png',
       },
-      // {
-      //   heading: 'Merchant Dashboard',
-      //   body: 'The back office matters as much as the storefront. Order management, inventory sync, promotional tools, and a revenue dashboard that surfaces what actually drives growth — not just vanity metrics.',
-      //   image: '/images/MacBook-Pro-14-inch-free-mockup-kit-1000x750.webp',
-      // },
+      
     ],
   },
   {

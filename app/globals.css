@@ -275,6 +275,55 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   background-image: repeating-linear-gradient(135deg, var(--line) 0 1px, transparent 1px 8px);
   opacity: .6;
 }
+/* Desktop bento positions */
+.hero-proj-ecommerce { grid-column: 1 / span 3; grid-row: 1 / span 4; padding: 0; }
+.hero-proj-webapps   { grid-column: 4 / span 2; grid-row: 1 / span 2; padding: 0; }
+.hero-proj-mobile    { grid-column: 4 / span 2; grid-row: 3 / span 2; padding: 0; }
+.hero-meta-jp        { grid-column: 6; grid-row: 1; }
+.hero-meta-loc       { grid-column: 6; grid-row: 2; }
+.hero-meta-avail     { grid-column: 6; grid-row: 3; }
+.hero-meta-yrs       { grid-column: 6; grid-row: 4; }
+.hero-meta-big       { font-size: clamp(10px, 1.4vw, 20px); }
+
+.hero-proj-cell {
+  text-decoration: none;
+  display: block;
+}
+.hero-proj-cell:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.hero-proj-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.6) 0%, rgba(0,0,0,.1) 45%, transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity .25s ease;
+}
+.hero-proj-cell:hover .hero-proj-overlay { opacity: .75; }
+.hero-proj-label {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.hero-proj-cat {
+  font-family: var(--font-mono), ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 9px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.55);
+  line-height: 1;
+}
+.hero-proj-name {
+  font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(12px, 1.4vw, 20px);
+  font-weight: 600;
+  letter-spacing: -.02em;
+  color: #fff;
+  line-height: 1.1;
+}
 .hero-meta {
   display: flex;
   justify-content: space-between;
@@ -1534,9 +1583,25 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 ───────────────────────────────────────────── */
 @media (max-width: 900px) {
   .hero-grid { grid-template-columns: 1fr; }
-  .hero-visual { min-height: 240px; }
-  .hero-stage { padding: 24px; }
-  .hero-inner { grid-template-columns: 1fr; }
+  .hero-stage { padding: 24px; justify-content: flex-start; gap: 20px; }
+  .hero-inner { grid-template-columns: 1fr; min-height: 0; }
+
+  /* Mobile bento: 4 cols × 3 rows */
+  .hero-visual {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 200px 150px 52px;
+    min-height: 0;
+  }
+  .hero-proj-ecommerce { grid-column: 1 / span 4; grid-row: 1; }
+  .hero-proj-webapps   { grid-column: 1 / span 2; grid-row: 2; }
+  .hero-proj-mobile    { grid-column: 3 / span 2; grid-row: 2; }
+  .hero-meta-jp        { grid-column: 1; grid-row: 3; }
+  .hero-meta-loc       { grid-column: 2; grid-row: 3; }
+  .hero-meta-avail     { grid-column: 3; grid-row: 3; }
+  .hero-meta-yrs       { grid-column: 4; grid-row: 3; }
+  .hero-meta-big       { font-size: clamp(9px, 3vw, 14px); bottom: 6px; left: 6px; }
+  .hero-proj-name      { font-size: 13px; }
+  .hero-proj-cat       { font-size: 8px; }
 
   .about-body { padding: 28px; gap: 18px; }
   .about-inner { grid-template-columns: 1fr; min-height: 0; }

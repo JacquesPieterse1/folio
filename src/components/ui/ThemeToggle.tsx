@@ -3,13 +3,13 @@
 import { useEffect, useRef, useState } from 'react'
 
 export function ThemeToggle() {
-  // Default to light — matches the design's default
-  const [theme, setTheme] = useState<'light' | 'dark'>('light')
-  const resolvedRef = useRef<'light' | 'dark'>('light')
+  // Default to dark — matches the design's default
+  const [theme, setTheme] = useState<'light' | 'dark'>('dark')
+  const resolvedRef = useRef<'light' | 'dark'>('dark')
 
   useEffect(() => {
     const stored = localStorage.getItem('jp.theme') as 'light' | 'dark' | null
-    resolvedRef.current = stored ?? 'light'
+    resolvedRef.current = stored ?? 'dark'
     document.documentElement.setAttribute('data-theme', resolvedRef.current)
     Promise.resolve().then(() => setTheme(resolvedRef.current))
   }, [])

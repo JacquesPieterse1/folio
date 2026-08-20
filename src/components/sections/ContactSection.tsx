@@ -6,8 +6,7 @@ import Image from 'next/image'
 const ACTIONS = [
   { label: 'Email',       href: 'mailto:jacquespieterse2000@gmail.com', ghost: false },
   { label: 'GitHub',      href: 'https://github.com/JacquesPieterse1',  ghost: true  },
-  { label: 'LinkedIn',    href: '#',                                     ghost: true  },
-  { label: 'X / Twitter', href: '#',                                     ghost: true  },
+  { label: 'LinkedIn',    href: 'https://www.linkedin.com/in/jacques-pieterse-9882b3250/',                                     ghost: true  },
 ]
 
 export function ContactSection() {
@@ -79,7 +78,7 @@ export function ContactSection() {
         <div className="contact-portrait-col">
           <div className="contact-portrait">
             <Image
-              src="/images/IMG_1176.jpg"
+              src="/images/IMG_1176.webp"
               alt="Jacques Pieterse"
               fill
               className="contact-portrait-img"

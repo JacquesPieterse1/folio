@@ -21,6 +21,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://jacquespieterse.com'),
   title: 'Jacques Pieterse — Full-Stack Developer',
   description:
     'Full-stack developer based in Cape Town, South Africa. Shipping real products — from internal tooling to mobile apps and web frontends.',
@@ -29,10 +30,15 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Jacques Pieterse — Full-Stack Developer',
     description: 'Full-stack developer based in Cape Town, South Africa.',
-    url: 'https://jacquespieterse.dev',
+    url: 'https://jacquespieterse.com',
     siteName: 'Jacques Pieterse',
     locale: 'en_ZA',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Jacques Pieterse — Full-Stack Developer',
+    description: 'Full-stack developer based in Cape Town, South Africa.',
   },
 }
 
@@ -52,7 +58,7 @@ export default function RootLayout({
         {/* Anti-FOUC: set theme before React hydration */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{var t=localStorage.getItem('jp.theme');document.documentElement.setAttribute('data-theme',t||'light');}catch(e){}`
+            __html: `try{var t=localStorage.getItem('jp.theme');document.documentElement.setAttribute('data-theme',t||'dark');}catch(e){}`
           }}
         />
         <Providers>

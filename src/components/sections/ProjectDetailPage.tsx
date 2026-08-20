@@ -147,9 +147,9 @@ export function ProjectDetailPage({ project }: { project: Project }) {
                 <div className="proj-detail-split-divider" />
                 <h2 className="proj-detail-section-heading">{section.heading}</h2>
                 <p className="proj-detail-section-body">{section.body}</p>
-                {project.live && (
+                {section.live && (
                   <a
-                    href={project.live}
+                    href={section.live}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="proj-site-link"

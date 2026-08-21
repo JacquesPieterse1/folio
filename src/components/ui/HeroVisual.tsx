@@ -4,7 +4,7 @@ const PROJECTS = [
   {
     title: 'Ecommerce',
     category: 'Digital Commerce',
-    image: '/images/ecommerce.png',
+    image: '/images/ecommerce.webp',
     cellClass: 'hero-proj-ecommerce',
   },
   {
@@ -16,7 +16,7 @@ const PROJECTS = [
   {
     title: 'Mobile Apps',
     category: 'Mobile Development',
-    image: '/images/web-portfolio-mockup_10.png',
+    image: '/images/Shot.png',
     cellClass: 'hero-proj-mobile',
   },
 ]

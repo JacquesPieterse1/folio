@@ -100,7 +100,7 @@ export const projects: Project[] = [
     id: 'mobile-apps',
     title: 'Mobile Apps',
     category: 'Mobile Development',
-    image: '/images/web-portfolio-mockup_10.png',
+    image: '/images/Shot.png',
     description: 'Cross-platform and native apps for iOS and Android that feel exactly right on-device.',
     longDescription: 'Mobile is the hardest platform to get right. Screen real estate is tight, attention spans are shorter, and users have a zero-tolerance policy for lag. I build with .NET MAUI for cross-platform reach and Swift when native iOS precision is required — always targeting 60fps, always designing for thumbs, always testing on real hardware. Offline-first architecture where the use case demands it.',
     year: '2026',

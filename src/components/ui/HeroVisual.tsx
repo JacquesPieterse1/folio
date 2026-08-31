@@ -10,7 +10,7 @@ const PROJECTS = [
   {
     title: 'Web Applications',
     category: 'SaaS & Tooling',
-    image: '/images/Single.png',
+    image: '/images/loopin.webp',
     cellClass: 'hero-proj-webapps',
   },
   {

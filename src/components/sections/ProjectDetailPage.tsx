@@ -3,9 +3,16 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { m } from 'framer-motion'
-import { type Project, projects } from '@/src/lib/data'
+import { type Project, type ProjectMedia, projects } from '@/src/lib/data'
 
 const EASE = { duration: 0.7, ease: 'easeOut' as const }
+
+const REVEAL = {
+  initial: { opacity: 0, y: 24 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: '-60px' },
+  transition: EASE,
+}
 
 function TitleGroup({ title }: { title: string }) {
   return (
@@ -13,6 +20,151 @@ function TitleGroup({ title }: { title: string }) {
       <span>{title}</span>
       <span className="proj-title-sep">✳</span>
     </span>
+  )
+}
+
+/* ── Spec table row: two labelled cells with a hairline above ───── */
+function SpecRow({
+  cells,
+}: {
+  cells: { label: string; value: React.ReactNode }[]
+}) {
+  return (
+    <div className="proj-spec-row">
+      <div className="proj-spec-grid">
+        {cells.map((cell) => (
+          <span className="proj-spec-label" key={cell.label}>
+            {cell.label}
+          </span>
+        ))}
+      </div>
+      <div className="proj-spec-rule" />
+      <div className="proj-spec-grid">
+        {cells.map((cell) => (
+          <div className="proj-spec-value" key={cell.label}>
+            {cell.value}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/* ── One media block ────────────────────────────────────────────── */
+function MediaBlock({ item, index }: { item: ProjectMedia; index: number }) {
+  const num = String(index + 1).padStart(2, '0')
+
+  if (item.kind === 'pair') {
+    return (
+      <m.figure className="proj-media proj-media-pair" {...REVEAL}>
+        {item.srcs.map((src, i) => (
+          <div className="proj-media-frame" key={src + i}>
+            <Image
+              src={src}
+              alt={item.alts[i]}
+              fill
+              sizes="(max-width: 900px) 100vw, 46vw"
+              style={{ objectFit: 'cover' }}
+            />
+          </div>
+        ))}
+        {item.caption && (
+          <figcaption className="proj-media-caption">
+            <span className="proj-media-num">{num}</span>
+            {item.caption}
+          </figcaption>
+        )}
+      </m.figure>
+    )
+  }
+
+  if (item.kind === 'mobile') {
+    return (
+      <m.figure className="proj-media proj-media-mobile" {...REVEAL}>
+        <div className="proj-mobile-stage">
+          {item.srcs.map((src, i) => (
+            <div className="proj-phone" key={src + i}>
+              <Image
+                src={src}
+                alt={`${item.alt} — screen ${i + 1}`}
+                fill
+                sizes="(max-width: 900px) 40vw, 22vw"
+                style={{ objectFit: 'cover' }}
+              />
+            </div>
+          ))}
+        </div>
+        {item.caption && (
+          <figcaption className="proj-media-caption">
+            <span className="proj-media-num">{num}</span>
+            {item.caption}
+          </figcaption>
+        )}
+      </m.figure>
+    )
+  }
+
+  if (item.kind === 'video') {
+    return (
+      <m.figure className="proj-media" {...REVEAL}>
+        <div className="proj-media-frame proj-media-frame--video">
+          {item.src ? (
+            <video
+              className="proj-video"
+              src={item.src}
+              poster={item.poster}
+              controls
+              playsInline
+              preload="metadata"
+              aria-label={item.alt}
+            />
+          ) : (
+            <>
+              <Image
+                src={item.poster}
+                alt={item.alt}
+                fill
+                sizes="100vw"
+                style={{ objectFit: 'cover' }}
+              />
+              <div className="proj-video-veil" />
+              <div className="proj-video-pending">
+                <span className="proj-video-play" aria-hidden="true">
+                  ▶
+                </span>
+                <span className="proj-video-pending-label">Walkthrough coming soon</span>
+              </div>
+            </>
+          )}
+        </div>
+        {item.caption && (
+          <figcaption className="proj-media-caption">
+            <span className="proj-media-num">{num}</span>
+            {item.caption}
+          </figcaption>
+        )}
+      </m.figure>
+    )
+  }
+
+  return (
+    <m.figure className="proj-media" {...REVEAL}>
+      <div className={`proj-media-frame${item.tall ? ' proj-media-frame--tall' : ''}`}>
+        <Image
+          src={item.src}
+          alt={item.alt}
+          fill
+          sizes="100vw"
+          style={{ objectFit: 'cover' }}
+        />
+      </div>
+      {item.caption && (
+        <figcaption className="proj-media-caption">
+          <span className="proj-media-num">{num}</span>
+          {item.caption}
+        </figcaption>
+      )}
+    </m.figure>
   )
 }
 
@@ -51,7 +203,7 @@ export function ProjectDetailPage({ project }: { project: Project }) {
         </m.div>
       </div>
 
-      {/* ── Meta row: PROJECT [ XX - N ]  ...  year ──────── */}
+      {/* ── Meta row: PROJECT [ XX - N ]  ...  status ──────── */}
       <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -59,7 +211,7 @@ export function ProjectDetailPage({ project }: { project: Project }) {
         className="proj-meta-row"
       >
         <span className="proj-meta-label">{indexLabel}</span>
-        <span className="proj-meta-year">{project.year}</span>
+        <span className="proj-meta-year">{project.status ?? project.category}</span>
       </m.div>
 
       {/* ── Title card ───────────────────────────────────── */}
@@ -78,93 +230,60 @@ export function ProjectDetailPage({ project }: { project: Project }) {
         </h1>
       </m.div>
 
-      {/* ── Hero image ───────────────────────────────────── */}
-      <m.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ ...EASE, delay: 0.32 }}
-        className="proj-hero-img"
-      >
-        <Image
-          src={project.image}
-          alt={project.title}
-          fill
-          priority
-          sizes="100vw"
-          style={{ objectFit: 'cover' }}
-        />
-        {/* Overlaid title in the image */}
-        <div className="proj-hero-img-title" aria-hidden="true">
-          <span>{project.title.toUpperCase()}</span>
-        </div>
-      </m.div>
-
-      {/* ── Description ──────────────────────────────────── */}
+      {/* ── Spec table ───────────────────────────────────── */}
       <m.section
         initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-60px' }}
-        transition={EASE}
-        className="proj-detail-desc-section"
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ ...EASE, delay: 0.3 }}
+        className="proj-spec-table"
+        aria-label="Project details"
       >
-        <div className="proj-detail-desc-inner">
-          <div className="proj-detail-desc-label">
-            <span>About</span>
-          </div>
-          <p className="proj-detail-desc-text">{project.longDescription}</p>
-        </div>
+        <SpecRow
+          cells={[
+            {
+              label: 'Services',
+              value: project.services.map((s) => <span key={s}>{s}</span>),
+            },
+            { label: 'Year', value: project.year },
+          ]}
+        />
+        <SpecRow
+          cells={[
+            { label: 'Industry', value: project.industry },
+            { label: 'Result', value: project.result },
+          ]}
+        />
       </m.section>
 
-      {/* ── Content sections ─────────────────────────────── */}
-      {project.sections.map((section, i) => {
-        const isEven = i % 2 === 0
-        return (
-          <m.section
-            key={i}
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={EASE}
-            className="proj-detail-content-section"
-          >
-            <div className={`proj-detail-split${isEven ? '' : ' proj-detail-split--reverse'}`}>
+      {/* ── Overview + live link ─────────────────────────── */}
+      <m.section className="proj-overview" {...REVEAL}>
+        <div className="proj-overview-text">
+          {project.overview.map((para, i) => (
+            <p key={i}>{para}</p>
+          ))}
+        </div>
+        {project.live && (
+          <div className="proj-overview-aside">
+            <a
+              href={project.live}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="proj-live-link"
+              data-cursor="hover"
+            >
+              <span>Live website</span>
+              <span className="proj-live-arrow" aria-hidden="true">⟶</span>
+            </a>
+          </div>
+        )}
+      </m.section>
 
-              <div className="proj-detail-split-img">
-                <Image
-                  src={section.image}
-                  alt={section.heading}
-                  fill
-                  sizes="(max-width: 900px) 100vw, 55vw"
-                  style={{ objectFit: 'cover' }}
-                />
-                <div className="proj-detail-img-overlay" />
-                <span className="proj-detail-section-num">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
-              </div>
-
-              <div className="proj-detail-split-text">
-                <div className="proj-detail-split-divider" />
-                <h2 className="proj-detail-section-heading">{section.heading}</h2>
-                <p className="proj-detail-section-body">{section.body}</p>
-                {section.live && (
-                  <a
-                    href={section.live}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="proj-site-link"
-                    data-cursor="hover"
-                  >
-                    <span>View Site</span>
-                    <span className="proj-site-link-arrow">↗</span>
-                  </a>
-                )}
-              </div>
-
-            </div>
-          </m.section>
-        )
-      })}
+      {/* ── Media ────────────────────────────────────────── */}
+      <div className="proj-media-stack">
+        {project.media.map((item, i) => (
+          <MediaBlock key={i} item={item} index={i} />
+        ))}
+      </div>
 
     </m.div>
   )

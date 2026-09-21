@@ -81,6 +81,32 @@ export function ProjectsSection() {
             {projects.map((project, index) => (
               <ProjectCard key={project.id} project={project} index={index} />
             ))}
+
+            {/* ── Next up — more work in the oven ──────────────── */}
+            <aside className="cooking-card" aria-label="More work coming soon">
+              <span className="cooking-index" aria-hidden="true">
+                {String(projects.length + 1).padStart(2, '0')}
+              </span>
+
+              <span className="cooking-tag">
+                <span className="cooking-dots" aria-hidden="true">
+                  <i />
+                  <i />
+                  <i />
+                </span>
+                Next up
+              </span>
+
+              <h3 className="cooking-title">
+                I&rsquo;m cooking
+                <br />
+                something good
+              </h3>
+
+              <p className="cooking-body">
+                More work is in the oven. New builds land here the moment they ship.
+              </p>
+            </aside>
           </div>
         </div>
       </section>

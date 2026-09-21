@@ -52,7 +52,7 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
         }}
       >
         {/* ── Top: label + title + description ── */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '16px' }}>
           {/* Category tag */}
           <span
             style={{
@@ -74,6 +74,14 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
             {project.category}
           </span>
 
+          {/* In-progress badge */}
+          {project.status && (
+            <span className="proj-status-pill">
+              <span className="proj-status-dot" aria-hidden="true" />
+              {project.status}
+            </span>
+          )}
+
           {/* Project title */}
           <h3
             style={{
@@ -93,7 +101,7 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
 
         {/* View project link */}
         <div className="proj-card-view-link">
-          <span>View projects</span>
+          <span>View project</span>
           <ArrowUpRight size={14} />
         </div>
 

@@ -1,25 +1,8 @@
 import Image from 'next/image'
+import { projects } from '@/src/lib/data'
 
-const PROJECTS = [
-  {
-    title: 'Ecommerce',
-    category: 'Digital Commerce',
-    image: '/images/ecommerce.webp',
-    cellClass: 'hero-proj-ecommerce',
-  },
-  {
-    title: 'Web Applications',
-    category: 'SaaS & Tooling',
-    image: '/images/loopin.webp',
-    cellClass: 'hero-proj-webapps',
-  },
-  {
-    title: 'Mobile Apps',
-    category: 'Mobile Development',
-    image: '/images/Shot.png',
-    cellClass: 'hero-proj-mobile',
-  },
-]
+/* Positional grid classes — index-matched to the first three projects */
+const CELL_CLASSES = ['hero-proj-ecommerce', 'hero-proj-webapps', 'hero-proj-mobile']
 
 export function HeroVisual() {
   return (
@@ -27,11 +10,11 @@ export function HeroVisual() {
       className="hero-visual reveal"
       style={{ ['--rev-delay' as string]: '120ms' }}
     >
-      {PROJECTS.map((proj) => (
+      {projects.slice(0, 3).map((proj, i) => (
         <a
-          key={proj.title}
-          href="#projects"
-          className={`hero-cell hero-proj-cell ${proj.cellClass}`}
+          key={proj.id}
+          href={`/${proj.id}`}
+          className={`hero-cell hero-proj-cell ${CELL_CLASSES[i]}`}
           aria-label={`View ${proj.title}`}
         >
           <Image

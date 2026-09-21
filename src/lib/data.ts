@@ -5,18 +5,28 @@ export type ProjectSection = {
   live?: string
 }
 
+/* Media blocks that make up a project page — images first, prose second */
+export type ProjectMedia =
+  | { kind: 'image'; src: string; alt: string; caption?: string; tall?: boolean }
+  | { kind: 'pair'; srcs: [string, string]; alts: [string, string]; caption?: string }
+  | { kind: 'mobile'; srcs: string[]; alt: string; caption?: string }
+  | { kind: 'video'; src?: string; poster: string; alt: string; caption?: string }
+
 export type Project = {
   id: string          // URL slug
   title: string
   category: string
   image: string
   description: string
-  longDescription: string
+  overview: string[]  // 1-2 short paragraphs, no more
   year: string
+  industry: string
+  result: string
   services: string[]
   live?: string
   featured: boolean
-  sections: ProjectSection[]
+  status?: string     // e.g. 'In progress' — omit for shipped work
+  media: ProjectMedia[]
 }
 
 export type Service = {
@@ -32,6 +42,121 @@ export type StackItem = {
 
 export const projects: Project[] = [
   {
+    id: 'clientbrief',
+    title: 'ClientBrief',
+    category: 'Insurance SaaS',
+    image: '/images/clientbrief.png',
+    description: 'A policy and client management platform that puts the right information in front of the right people.',
+    overview: [
+      'ClientBrief replaces the spreadsheets-and-inbox setup most insurance teams run on. Policies, clients and renewals live in one place, with role-based access so sensitive data stays scoped correctly.',
+      'Built full-stack — schema, API, dashboard and deploy pipeline. Server-side aggregation keeps large books of business rendering instantly rather than spinning.',
+    ],
+    year: '2025',
+    industry: 'Insurance',
+    result: 'Renewals tracked in one place',
+    services: ['Product design', 'Next.js development', 'PostgreSQL / Supabase'],
+    live: '#',
+    featured: true,
+    media: [
+      { kind: 'image', src: '/images/clientbrief.png', alt: 'ClientBrief dashboard overview' },
+      {
+        kind: 'video',
+        poster: '/images/clientbrief.png',
+        alt: 'Walkthrough of the ClientBrief dashboard',
+        caption: 'Dashboard walkthrough',
+      },
+      {
+        kind: 'pair',
+        srcs: ['https://placehold.co/1200x900.png', 'https://placehold.co/1200x900.png'],
+        alts: ['Policy detail view', 'Renewal pipeline'],
+      },
+      {
+        kind: 'mobile',
+        srcs: [
+          '/images/mobile-clientbrief2.png',
+          '/images/mobile-clientbrief1.png',
+          '/images/mobile-clientbrief3.png',
+        ],
+        alt: 'ClientBrief on mobile',
+        caption: 'Responsive down to phone width',
+      },
+    ],
+  },
+  {
+    id: 'inboxiq',
+    title: 'InboxIQ',
+    category: 'AI & Automation',
+    image: 'https://placehold.co/1600x1000.png',
+    description: 'An AI layer over the inbox that triages, drafts, and routes the repetitive work.',
+    overview: [
+      'InboxIQ sits over a shared team inbox and handles the high-frequency work — triage, classification, draft replies, routing — with an audit trail so nobody has to babysit it.',
+      'Currently in active development.',
+    ],
+    year: '2026',
+    industry: 'B2B SaaS',
+    result: 'In active development',
+    services: ['Product design', 'Next.js development', 'OpenAI integration'],
+    featured: true,
+    status: 'In progress',
+    media: [
+      { kind: 'image', src: 'https://placehold.co/1600x1000.png', alt: 'InboxIQ triage view' },
+      {
+        kind: 'video',
+        poster: 'https://placehold.co/1600x900.png',
+        alt: 'Walkthrough of the InboxIQ triage workflow',
+        caption: 'Triage workflow walkthrough',
+      },
+      {
+        kind: 'pair',
+        srcs: ['https://placehold.co/1200x900.png', 'https://placehold.co/1200x900.png'],
+        alts: ['Rule builder', 'Audit trail'],
+      },
+    ],
+  },
+  {
+    id: 'mooirivier-makelaars',
+    title: 'Mooirivier Makelaars',
+    category: 'Real Estate',
+    image: 'https://placehold.co/1600x1000.png',
+    description: 'A property listing site for a local estate agency — fast search, clean listings, easy enquiries.',
+    overview: [
+      'A listing site built around the two things that matter: finding a property and reaching the agent. Filter by suburb, price band and type, with results that update without a full page reload.',
+      'The agency manages listings themselves through a CMS — no developer in the loop for day-to-day updates.',
+    ],
+    year: '2026',
+    industry: 'Real estate',
+    result: 'Listings managed in-house',
+    services: ['Web design', 'Next.js development', 'CMS setup'],
+    live: '#',
+    featured: true,
+    media: [
+      { kind: 'image', src: 'https://placehold.co/1600x1000.png', alt: 'Mooirivier Makelaars homepage' },
+      {
+        kind: 'pair',
+        srcs: ['https://placehold.co/1200x900.png', 'https://placehold.co/1200x900.png'],
+        alts: ['Listing grid with filters', 'Single property page'],
+      },
+      {
+        kind: 'mobile',
+        srcs: [
+          'https://placehold.co/440x900.png',
+          'https://placehold.co/440x900.png',
+          'https://placehold.co/440x900.png',
+        ],
+        alt: 'Mooirivier Makelaars on mobile',
+        caption: 'Built mobile-first for on-the-go browsing',
+      },
+    ],
+  },
+]
+
+/* ── Parked for now: the old category-based grouping ─────────────────
+   The home page used to split work into three categories — Ecommerce,
+   Web Applications, Mobile Apps — each with its own sub-projects.
+   Kept here so the copy isn't lost; re-enable by moving entries back
+   into the array above.
+
+  {
     id: 'ecommerce',
     title: 'Ecommerce',
     category: 'Digital Commerce',
@@ -44,20 +169,20 @@ export const projects: Project[] = [
     featured: true,
     sections: [
       {
-        heading: 'Deadstock Thrift',
-        body: 'The back office matters as much as the storefront. Order management, inventory sync, promotional tools, and a revenue dashboard that surfaces what actually drives growth — not just vanity metrics.',
+        heading: 'Deadstock Thrift Co.',
+        body: 'A Cape Town vintage and secondhand store built on Shopify — \'One of a kind. Obviously.\' The brief was zine meets record store meets 90s thrift receipt: raw, tactile, printed rather than rendered. It opens on an animated thermal-receipt loader that tears away to reveal the page, then runs through ten scroll-triggered sections. Every one is a custom Online Store 2.0 section with its own schema, so the shop owner can merchandise the whole homepage from the theme editor without touching Liquid.',
         image: '/images/deadstock.webp',
-        live: '#',
+        live: '',
       },
       {
         heading: 'Gia Nutrition',
-        body: 'A product page should answer every question a customer has before they ask it. High-fidelity imagery, size guidance, real stock levels, and honest reviews — all above the fold. The add-to-cart moment is the most important click on the site, so it gets the most care.',
+        body: 'Precision women\'s nutrition — science-backed supplements formulated for the female body rather than repackaged from a generic men\'s formula. The storefront had to carry that argument, so the product pages lead with clinical dosing, full ingredient transparency, and third-party validation before they ever ask for the sale. Custom hero, brand story, values, social proof and review sections sit on top of a fully wired Shopify 2.0 theme with cart drawer and predictive search.',
         image: '/images/gia.webp',
         live: '#',
       },
       {
-        heading: 'Apex Nutrition',
-        body: 'One-page checkout that handles guest and returning users, integrates with Apple Pay and Google Pay, and surfaces the right upsells without feeling pushy. Cart abandonment drops when people trust the process — so every step is transparent about cost, delivery, and returns.',
+        heading: 'Apex Fuel',
+        body: 'A gym-supplement brand with a flat editorial identity — cream ground, a single aggressive red, and a Barlow Condensed wordmark that fills the viewport. No card shadows, no lift, no gloss. The build pairs a letter-by-letter assembly loader and a hard curtain wipe with an asymmetric three-band product grid and a full-width manifesto banner, all driven by theme settings so collections, colors and copy stay merchandisable.',
         image: '/images/apex.webp',
         live: '#',
       },
@@ -102,9 +227,9 @@ export const projects: Project[] = [
     category: 'Mobile Development',
     image: '/images/Shot.png',
     description: 'Cross-platform and native apps for iOS and Android that feel exactly right on-device.',
-    longDescription: 'Mobile is the hardest platform to get right. Screen real estate is tight, attention spans are shorter, and users have a zero-tolerance policy for lag. I build with .NET MAUI for cross-platform reach and Swift when native iOS precision is required — always targeting 60fps, always designing for thumbs, always testing on real hardware. Offline-first architecture where the use case demands it.',
+    longDescription: 'Mobile is the hardest platform to get right. Screen real estate is tight, attention spans are shorter, and users have a zero-tolerance policy for lag. I build with React Native for cross-platform reach and Swift when native iOS precision is required — always targeting 60fps, always designing for thumbs, always testing on real hardware. Offline-first architecture where the use case demands it.',
     year: '2026',
-    services: ['.NET MAUI', 'Swift', 'iOS', 'Android', 'Push Notifications'],
+    services: ['Swift', 'iOS', 'Android', 'Push Notifications'],
     live: '#',
     featured: true,
     sections: [
@@ -115,7 +240,8 @@ export const projects: Project[] = [
       },
     ],
   },
-]
+
+──────────────────────────────────────────────────────────────────── */
 
 export const services: Service[] = [
   {
